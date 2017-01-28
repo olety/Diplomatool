@@ -10,24 +10,36 @@ class UserType(models.Model):
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, first_name, last_name, degree, faculty, user_type, department, password=None):
+    def create_user(self, email, first_name, last_name, degree, faculty, type, department, password=None):
         # Creates a user with a given data
         if not email:
             raise ValueError('Users must have an email address')
 
         user = self.model(
             email=self.normalize_email(email),
+            first_name=first_name,
+            last_name=last_name,
+            degree=degree,
+            faculty=faculty,
+            type=type,
+            department=department
         )
 
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, date_of_birth, password):
+    def create_superuser(self, email, first_name, last_name, degree, faculty, type, department, password):
         # Creates a superuser with a given data
         user = self.create_user(
-            email,
-            password=password,
+            email=self.normalize_email(email),
+            first_name=first_name,
+            last_name=last_name,
+            degree=degree,
+            faculty=faculty,
+            type=type,
+            department=department,
+            password=password
         )
         user.is_admin = True
         user.save(using=self._db)
@@ -41,8 +53,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     degree = models.CharField('degree', max_length=50, blank=True)
     email = models.EmailField('email address', blank=False)
     department = models.CharField('user department', max_length=4, blank=True)
-    faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE)
-    user_type = models.ForeignKey(UserType, on_delete=models.CASCADE)
+    faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE, blank=True, verbose_name='user faculty')
+    type = models.ForeignKey(UserType, on_delete=models.CASCADE, blank=True, verbose_name='user type')
+    # password is inherited
 
     objects = UserManager()
 
@@ -71,6 +84,7 @@ class Topic(models.Model):
         on_delete=models.CASCADE,
         verbose_name='topic owner'
     )
+
     student = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
