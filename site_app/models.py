@@ -4,9 +4,12 @@ from django.db import models
 # Create your models here.
 
 
-class User(AbstractUser):
+class UserType():
     pass
 
+
+class User(AbstractUser):LOW = 0
+    pass
 
 class Topic():
     pass
