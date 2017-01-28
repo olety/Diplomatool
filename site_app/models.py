@@ -4,24 +4,29 @@ from django.db import models
 # Create your models here.
 
 
-class UserType():
+class UserType(models.Model):
+    type_name = models.CharField(max_length=255)
+
+
+class User(AbstractUser, models.Model):
     pass
 
 
-class User(AbstractUser):LOW = 0
-    pass
-
-class Topic():
-    pass
-
-
-class Faculty():
-    pass
+class Topic(models.Model):
+    level = models.CharField(max_length=255)
+    voted_for = models.BooleanField()
+    available = models.BooleanField()
+    checked = models.BooleanField()
 
 
-class Review():
-    pass
+class Faculty(models.Model):
+    code = models.CharField(max_length=4)
+    name = models.CharField(max_length=255)
 
+
+class Review(models.Model):
+    is_finished = models.BooleanField
+    finished_date = models.DateTimeField(default=timezone.now)
 
 class Thesis():
     pass
