@@ -177,6 +177,13 @@ class Thesis(models.Model):
     reviewed = models.BooleanField('reviewed')
     short_description = models.CharField('short description', max_length=255)
 
+    def __str__(self):
+        return self.get_thesis_name()
+
+    def get_thesis_name(self):
+        thesis_name = 'Thesis: {} {}'.format(self.topic.name, self.student.get_full_name())
+        return thesis_name.strip()
+
 
 class Review(models.Model):
     thesis = models.ForeignKey(
@@ -194,6 +201,13 @@ class Review(models.Model):
     is_finished = models.BooleanField('is finished')
     finished_date = models.DateTimeField('finished date', default=timezone.now)
 
+    def __str__(self):
+        return self.get_review_name()
+
+    def get_review_name(self):
+        review_name = 'Review: {} {}'.format(self.id, self.thesis.get_thesis_name())
+        return review_name.strip()
+
 
 class Defense(models.Model):
     thesis = models.ForeignKey(
@@ -205,3 +219,10 @@ class Defense(models.Model):
     date = models.DateTimeField('defense date', default=timezone.now)
     successful = models.BooleanField('successful')
     second_defense = models.BooleanField('second defense required')
+
+    def __str__(self):
+        return self.get_defense_name()
+
+    def get_defense_name(self):
+        defense_name = 'Defense: {} {}'.format(self.id, self.thesis.get_thesis_name())
+        return defense_name.strip()
