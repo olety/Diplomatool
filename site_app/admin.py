@@ -3,8 +3,7 @@ from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
-
-from site_app.models import User, UserType
+from site_app.models import User, UserType, Faculty, Topic
 
 
 class UserTypeCreationForm(forms.ModelForm):
@@ -23,6 +22,42 @@ class UserTypeAdmin(admin.ModelAdmin):
     form = UserTypeChangeForm
     add_form = UserTypeCreationForm
     list_display = ('type_name',)
+
+
+class FacultyCreationForm(forms.ModelForm):
+    class Meta:
+        model = Faculty
+        fields = ('code', 'name')
+
+
+class FacultyChangeForm(forms.ModelForm):
+    class Meta:
+        model = Faculty
+        fields = ('code', 'name')
+
+
+class FacultyAdmin(admin.ModelAdmin):
+    form = UserTypeChangeForm
+    add_form = UserTypeCreationForm
+    list_display = ('code', 'name')
+
+
+class TopicCreationForm(forms.ModelForm):
+    class Meta:
+        model = Topic
+        fields = ('name', 'student', 'supervisor', 'level', 'voted_for', 'available', 'checked')
+
+
+class TopicChangeForm(forms.ModelForm):
+    class Meta:
+        model = Topic
+        fields = ('name', 'student', 'supervisor', 'level', 'voted_for', 'available', 'checked')
+
+
+class TopicAdmin(admin.ModelAdmin):
+    form = TopicChangeForm
+    add_form = TopicCreationForm
+    list_display = ('name', 'student', 'supervisor', 'level', 'voted_for', 'available', 'checked')
 
 
 class UserCreationForm(forms.ModelForm):
@@ -92,8 +127,7 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2')}
-        ),
+            'fields': ('email', 'password1', 'password2')}),
     )
     search_fields = ('email', 'first_name', 'last_name', 'degree', 'faculty', 'type', 'department')
     ordering = ('email', 'first_name', 'last_name')
@@ -103,3 +137,5 @@ class UserAdmin(BaseUserAdmin):
 admin.site.register(User, UserAdmin)
 admin.site.unregister(Group)
 admin.site.register(UserType, UserTypeAdmin)
+admin.site.register(Faculty, FacultyAdmin)
+admin.site.register(Topic, TopicAdmin)

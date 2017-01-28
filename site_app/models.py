@@ -8,10 +8,36 @@ from django.utils import timezone
 class UserType(models.Model):
     type_name = models.CharField(max_length=255)
 
+    def __str__(self):
+        return self.get_full_name()
+
+    def get_full_name(self):
+        full_name = 'Type: {}'.format(self.type_name)
+        return full_name.strip()
+
+    def get_short_name(self):
+        return self.type_name
+
 
 class Faculty(models.Model):
+    class Meta:
+        app_label = 'site_app'
+        verbose_name = 'faculty'
+        verbose_name_plural = 'faculties'
+        abstract = False
+
     code = models.CharField("faculty code", max_length=4)
     name = models.CharField("faculty name", max_length=255)
+
+    def __str__(self):
+        return self.get_full_name()
+
+    def get_full_name(self):
+        full_name = '{}: {}'.format(self.code, self.name)
+        return full_name.strip()
+
+    def get_short_name(self):
+        return self.name
 
 
 class UserManager(BaseUserManager):
@@ -22,7 +48,6 @@ class UserManager(BaseUserManager):
 
         user = self.model(
             email=self.normalize_email(email),
-
             **kwargs
         )
 
@@ -72,6 +97,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = 'users'
         abstract = False
 
+    def __str__(self):
+        return '{}: {}'.format(self.email, self.get_full_name())
+
     def get_full_name(self):
         full_name = '{} {}'.format(self.first_name, self.last_name)
         return full_name.strip()
@@ -84,22 +112,39 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Topic(models.Model):
+
     student = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         verbose_name='topic owner',
-        related_name='topic_owner'
+        related_name='topic_owner',
+        null=True
     )
+
     supervisor = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         verbose_name='topic supervisor',
-        related_name='topic_supervisor'
+        related_name='topic_supervisor',
+        null=True
     )
-    level = models.CharField("level", max_length=255)
-    voted_for = models.BooleanField("voted for")
-    available = models.BooleanField("available")
-    checked = models.BooleanField("checked")
+
+    name = models.CharField('topic', max_length=255)
+    level = models.CharField('level', max_length=255)
+    voted_for = models.NullBooleanField('voted for', null=True)
+    available = models.NullBooleanField('available', null=True)
+    checked = models.NullBooleanField('checked', null=True)
+    REQUIRED_FIELDS = ['name', ]
+
+    def __str__(self):
+        return self.get_full_name()
+
+    def get_full_name(self):
+        full_name = 'Topic: {}'.format(self.name)
+        return full_name.strip()
+
+    def get_short_name(self):
+        return self.name
 
 
 class Thesis(models.Model):
