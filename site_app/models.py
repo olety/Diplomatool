@@ -85,12 +85,17 @@ class Faculty(models.Model):
 
 
 class Review(models.Model):
-    is_finished = models.BooleanField
-    finished_date = models.DateTimeField(default=timezone.now)
-
-class Thesis():
-    pass
+    is_finished = models.BooleanField()
+    finished_date = models.DateTimeField(default=timezone.now())
 
 
-class Defense():
-    pass
+class Thesis(models.Model):
+    finished = models.BooleanField()
+    reviewed = models.BooleanField()
+    short_description = models.CharField(max_length=255)
+
+
+class Defense(models.Model):
+    date = models.DateTimeField(default=timezone.now())
+    successful = models.BooleanField()
+    second_defense = models.BooleanField()
