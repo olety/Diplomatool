@@ -160,7 +160,7 @@ class Thesis(models.Model):
         return self.get_thesis_name()
 
     def get_thesis_name(self):
-        thesis_name = 'Thesis: {} {}'.format(self.topic.name, self.student.get_full_name())
+        thesis_name = '{} by {}'.format(self.topic.name, self.student.get_full_name())
         return thesis_name.strip()
 
 
