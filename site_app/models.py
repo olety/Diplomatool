@@ -4,24 +4,19 @@ from django.core.mail import send_mail
 from django.db import models
 from django.utils import timezone
 
-# Create your models here.
-
 
 class UserType(models.Model):
     type_name = models.CharField(max_length=255)
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, name, surname, degree, faculty, user_type, password=None):
-        """
-        Creates and saves a User with the given email data
-        """
+    def create_user(self, email, first_name, last_name, degree, faculty, user_type, department, password=None):
+        # Creates a user with a given data
         if not email:
             raise ValueError('Users must have an email address')
 
         user = self.model(
             email=self.normalize_email(email),
-            date_of_birth=date_of_birth,
         )
 
         user.set_password(password)
@@ -29,14 +24,10 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, date_of_birth, password):
-        """
-        Creates and saves a superuser with the given email, date of
-        birth and password.
-        """
+        # Creates a superuser with a given data
         user = self.create_user(
             email,
             password=password,
-            date_of_birth=date_of_birth,
         )
         user.is_admin = True
         user.save(using=self._db)
@@ -45,11 +36,13 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
 
-    first_name = models.CharField('first name', max_length=30, blank=True)
-    last_name = models.CharField('last name', max_length=30, blank=True)
-    email = models.EmailField('email address', blank=True)
-
-    date_joined = models.DateTimeField('date joined', default=timezone.now)
+    first_name = models.CharField('first name', max_length=255, blank=True)
+    last_name = models.CharField('last name', max_length=255, blank=True)
+    degree = models.CharField('degree', max_length=50, blank=True)
+    email = models.EmailField('email address', blank=False)
+    department = models.CharField('user department', max_length=4, blank=True)
+    faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE)
+    user_type = models.ForeignKey(UserType, on_delete=models.CASCADE)
 
     objects = UserManager()
 
@@ -83,7 +76,6 @@ class Topic(models.Model):
         on_delete=models.CASCADE,
         verbose_name='topic supervisor'
     )
-
     level = models.CharField("level", max_length=255)
     voted_for = models.BooleanField("voted for")
     available = models.BooleanField("available")
