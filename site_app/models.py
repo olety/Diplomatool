@@ -73,32 +73,70 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Topic(models.Model):
-    level = models.CharField("Level", max_length=255)
-    voted_for = models.BooleanField("Voted for")
-    available = models.BooleanField("Available")
-    checked = models.BooleanField("Checked")
+    student = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='topic owner'
+    )
+    student = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='topic supervisor'
+    )
+
+    level = models.CharField("level", max_length=255)
+    voted_for = models.BooleanField("voted for")
+    available = models.BooleanField("available")
+    checked = models.BooleanField("checked")
 
 
 class Faculty(models.Model):
-    code = models.CharField("Faculty code", max_length=4)
-    name = models.CharField("Faculty name", max_length=255)
+    code = models.CharField("faculty code", max_length=4)
+    name = models.CharField("faculty name", max_length=255)
 
 
 class Review(models.Model):
-    is_finished = models.BooleanField("Is finished")
-    finished_date = models.DateTimeField("Finished date", default=timezone.now())
+    thesis = models.ForeignKey(
+        Thesis,
+        on_delete=models.CASCADE,
+        verbose_name='reviewed thesis'
+    )
+    topic = models.ForeignKey(
+        Topic,
+        on_delete=models.CASCADE,
+        verbose_name='reviewed topic'
+    )
+    is_finished = models.BooleanField("is finished")
+    finished_date = models.DateTimeField("finished date", default=timezone.now())
 
 
 class Thesis(models.Model):
     supervisor = models.ForeignKey(
-        'User',
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='supervisor'
     )
-    finished = models.BooleanField()
-    reviewed = models.BooleanField()
-    short_description = models.CharField(max_length=255)
+    student = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='student'
+    )
+    topic = models.ForeignKey(
+        Topic,
+        on_delete=models.CASCADE,
+        verbose_name='thesis topic'
+    )
+    finished = models.BooleanField('finished')
+    reviewed = models.BooleanField('reviewed')
+    short_description = models.CharField('short description', max_length=255)
 
 
 class Defense(models.Model):
-    date = models.DateTimeField(default=timezone.now())
-    successful = models.BooleanField()
-    second_defense = models.BooleanField()
+    thesis = models.ForeignKey(
+        Thesis,
+        on_delete=models.CASCADE,
+        verbose_name='defended thesis'
+    )
+    date = models.DateTimeField('defense date', default=timezone.now())
+    successful = models.BooleanField('successful')
+    second_defense = models.BooleanField('second defense required')
