@@ -79,7 +79,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE, null=True,
                                 blank=True, verbose_name='user faculty')
     type = models.ForeignKey(UserType, on_delete=models.CASCADE, null=True,
-                             blank=True, default='Student', verbose_name='user type')
+                             blank=True, verbose_name='user type')
     # password is inherited
     is_admin = models.BooleanField('is admin', default=False)
 
