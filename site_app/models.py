@@ -69,18 +69,17 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
 
-    first_name = models.CharField('first name', max_length=255, null=True, blank=True, default='Name')
-    last_name = models.CharField('last name', max_length=255, null=True, blank=True, default='Surname')
+    first_name = models.CharField('first name', max_length=255,
+                                  null=True, blank=True, default='Name')
+    last_name = models.CharField('last name', max_length=255,
+                                 null=True, blank=True, default='Surname')
     degree = models.CharField('degree', max_length=50, null=True, blank=True, default='Degree')
     email = models.EmailField('email address', blank=False, unique=True)
     department = models.CharField('user department', max_length=4, null=True, blank=True)
-    faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE, null=True, blank=True, verbose_name='user faculty')
-    type = models.ForeignKey(UserType,
-                             on_delete=models.CASCADE,
-                             null=True,
-                             blank=True,
-                             default='Student',
-                             verbose_name='user type')
+    faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE, null=True,
+                                blank=True, verbose_name='user faculty')
+    type = models.ForeignKey(UserType, on_delete=models.CASCADE, null=True,
+                             blank=True, default='Student', verbose_name='user type')
     # password is inherited
     is_admin = models.BooleanField('is admin', default=False)
 
@@ -118,24 +117,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Topic(models.Model):
 
-    student = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        verbose_name='topic owner',
-        related_name='topic_owner',
-        null=True,
-        blank=True
-    )
-
-    supervisor = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        verbose_name='topic supervisor',
-        related_name='topic_supervisor',
-        null=True,
-        blank=True
-    )
-
+    student = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='topic owner',
+                                related_name='topic_owner', null=True, blank=True)
+    supervisor = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='topic supervisor',
+                                   related_name='topic_supervisor', null=True, blank=True)
     name = models.CharField('topic', max_length=255)
     level = models.CharField('level', max_length=255, null=True, blank=True, default='Bachelor')
     voted_for = models.NullBooleanField('voted for', null=True, blank=True)
@@ -155,24 +140,12 @@ class Topic(models.Model):
 
 
 class Thesis(models.Model):
-    supervisor = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        verbose_name='supervisor',
-        related_name='supervisor'
-    )
-    student = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        verbose_name='student',
-        related_name='student'
-    )
-    topic = models.ForeignKey(
-        Topic,
-        on_delete=models.CASCADE,
-        verbose_name='thesis topic',
-        related_name='thesis_topic'
-    )
+    supervisor = models.ForeignKey(User, on_delete=models.CASCADE,
+                                   verbose_name='supervisor', related_name='supervisor')
+    student = models.ForeignKey(User, on_delete=models.CASCADE,
+                                verbose_name='student', related_name='student')
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE,
+                              verbose_name='thesis topic', related_name='thesis_topic')
     finished = models.BooleanField('finished')
     reviewed = models.BooleanField('reviewed')
     short_description = models.CharField('short description', max_length=255)
@@ -186,18 +159,10 @@ class Thesis(models.Model):
 
 
 class Review(models.Model):
-    thesis = models.ForeignKey(
-        Thesis,
-        on_delete=models.CASCADE,
-        verbose_name='reviewed thesis',
-        related_name='reviewed_thesis'
-    )
-    topic = models.ForeignKey(
-        Topic,
-        on_delete=models.CASCADE,
-        verbose_name='reviewed topic',
-        related_name='reviewed_topic'
-    )
+    thesis = models.ForeignKey(Thesis, on_delete=models.CASCADE,
+                               verbose_name='reviewed thesis', related_name='reviewed_thesis')
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE,
+                              verbose_name='reviewed topic', related_name='reviewed_topic')
     is_finished = models.BooleanField('is finished')
     finished_date = models.DateTimeField('finished date', default=timezone.now)
 
@@ -210,12 +175,8 @@ class Review(models.Model):
 
 
 class Defense(models.Model):
-    thesis = models.ForeignKey(
-        Thesis,
-        on_delete=models.CASCADE,
-        verbose_name='defended thesis',
-        related_name='defended_thesis'
-    )
+    thesis = models.ForeignKey(Thesis, on_delete=models.CASCADE,
+                               verbose_name='defended thesis', related_name='defended_thesis')
     date = models.DateTimeField('defense date', default=timezone.now)
     successful = models.BooleanField('successful')
     second_defense = models.BooleanField('second defense required')
