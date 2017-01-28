@@ -1,110 +1,32 @@
 from django.contrib import admin
-from django import forms
-from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
-from site_app.models import User, UserType, Faculty, Topic, Thesis, Review, Defense
-
-
-class UserTypeCreationForm(forms.ModelForm):
-    class Meta:
-        model = UserType
-        fields = ('type_name',)
-
-
-class UserTypeChangeForm(forms.ModelForm):
-    class Meta:
-        model = UserType
-        fields = ('type_name',)
+from site_app.models import User, UserType, Faculty, Topic
+from site_app import forms
 
 
 class UserTypeAdmin(admin.ModelAdmin):
-    form = UserTypeChangeForm
-    add_form = UserTypeCreationForm
+    form = forms.UserTypeChangeForm
+    add_form = forms.UserTypeCreationForm
     list_display = ('type_name',)
 
 
-class FacultyCreationForm(forms.ModelForm):
-    class Meta:
-        model = Faculty
-        fields = ('code', 'name')
-
-
-class FacultyChangeForm(forms.ModelForm):
-    class Meta:
-        model = Faculty
-        fields = ('code', 'name')
-
-
 class FacultyAdmin(admin.ModelAdmin):
-    form = FacultyChangeForm
-    add_form = FacultyCreationForm
+    form = forms.FacultyChangeForm
+    add_form = forms.FacultyCreationForm
     list_display = ('code', 'name')
 
 
-class TopicCreationForm(forms.ModelForm):
-    class Meta:
-        model = Topic
-        fields = ('name', 'student', 'supervisor', 'level', 'voted_for', 'available', 'checked')
-
-
-class TopicChangeForm(forms.ModelForm):
-    class Meta:
-        model = Topic
-        fields = ('name', 'student', 'supervisor', 'level', 'voted_for', 'available', 'checked')
-
-
 class TopicAdmin(admin.ModelAdmin):
-    form = TopicChangeForm
-    add_form = TopicCreationForm
+    form = forms.TopicChangeForm
+    add_form = forms.TopicCreationForm
     list_display = ('name', 'student', 'supervisor', 'level', 'voted_for', 'available', 'checked')
-
-
-class UserCreationForm(forms.ModelForm):
-    """A form for creating new users. Includes all the required
-    fields, plus a repeated password."""
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
-
-    class Meta:
-        model = User
-        fields = ('email',)
-
-    def clean_password2(self):
-        # Check that the two passwords match
-        password1 = self.cleaned_data.get("password1")
-        password2 = self.cleaned_data.get("password2")
-        if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("Passwords don't match")
-        return password2
-
-    def save(self, commit=True):
-        # Save the provided password
-        user = super(UserCreationForm, self).save(commit=False)
-        user.set_password(self.cleaned_data["password1"])
-        if commit:
-            user.save()
-        return user
-
-
-class UserChangeForm(forms.ModelForm):
-    password = ReadOnlyPasswordHashField()
-
-    class Meta:
-        model = User
-        fields = ('email',)
-
-    def clean_password(self):
-        # Regardless of what the user provides, return the initial value.
-        # This is done here, rather than on the field, because the
-        # field does not have access to the initial value
-        return self.initial['password']
 
 
 class UserAdmin(BaseUserAdmin):
     # The forms to add and change user instances
-    form = UserChangeForm
-    add_form = UserCreationForm
+    form = forms.UserChangeForm
+    add_form = forms.UserCreationForm
 
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
@@ -189,8 +111,8 @@ class DefenseAdmin(admin.ModelAdmin):
 
 
 # Registering models
-admin.site.register(User, UserAdmin)
 admin.site.unregister(Group)
+admin.site.register(User, UserAdmin)
 admin.site.register(UserType, UserTypeAdmin)
 admin.site.register(Faculty, FacultyAdmin)
 admin.site.register(Topic, TopicAdmin)
