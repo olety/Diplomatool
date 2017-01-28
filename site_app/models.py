@@ -140,6 +140,12 @@ class Topic(models.Model):
 
 
 class Thesis(models.Model):
+    class Meta:
+        app_label = 'site_app'
+        verbose_name = 'thesis'
+        verbose_name_plural = 'theses'
+        abstract = False
+
     supervisor = models.ForeignKey(User, on_delete=models.CASCADE,
                                    verbose_name='supervisor', related_name='supervisor')
     student = models.ForeignKey(User, on_delete=models.CASCADE,
