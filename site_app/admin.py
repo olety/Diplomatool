@@ -37,8 +37,8 @@ class FacultyChangeForm(forms.ModelForm):
 
 
 class FacultyAdmin(admin.ModelAdmin):
-    form = UserTypeChangeForm
-    add_form = UserTypeCreationForm
+    form = FacultyChangeForm
+    add_form = FacultyCreationForm
     list_display = ('code', 'name')
 
 

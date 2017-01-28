@@ -26,8 +26,8 @@ class Faculty(models.Model):
         verbose_name_plural = 'faculties'
         abstract = False
 
-    code = models.CharField("faculty code", max_length=4)
-    name = models.CharField("faculty name", max_length=255)
+    code = models.CharField('faculty code', max_length=4)
+    name = models.CharField('faculty name', max_length=255)
 
     def __str__(self):
         return self.get_full_name()
@@ -69,13 +69,18 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
 
-    first_name = models.CharField('first name', max_length=255, null=True)
-    last_name = models.CharField('last name', max_length=255, null=True)
-    degree = models.CharField('degree', max_length=50, null=True)
+    first_name = models.CharField('first name', max_length=255, null=True, blank=True, default='Name')
+    last_name = models.CharField('last name', max_length=255, null=True, blank=True, default='Surname')
+    degree = models.CharField('degree', max_length=50, null=True, blank=True, default='Degree')
     email = models.EmailField('email address', blank=False, unique=True)
-    department = models.CharField('user department', max_length=4, null=True)
-    faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE, null=True, verbose_name='user faculty')
-    type = models.ForeignKey(UserType, on_delete=models.CASCADE, null=True, verbose_name='user type')
+    department = models.CharField('user department', max_length=4, null=True, blank=True)
+    faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE, null=True, blank=True, verbose_name='user faculty')
+    type = models.ForeignKey(UserType,
+                             on_delete=models.CASCADE,
+                             null=True,
+                             blank=True,
+                             default='Student',
+                             verbose_name='user type')
     # password is inherited
     is_admin = models.BooleanField('is admin', default=False)
 
@@ -118,7 +123,8 @@ class Topic(models.Model):
         on_delete=models.CASCADE,
         verbose_name='topic owner',
         related_name='topic_owner',
-        null=True
+        null=True,
+        blank=True
     )
 
     supervisor = models.ForeignKey(
@@ -126,14 +132,15 @@ class Topic(models.Model):
         on_delete=models.CASCADE,
         verbose_name='topic supervisor',
         related_name='topic_supervisor',
-        null=True
+        null=True,
+        blank=True
     )
 
     name = models.CharField('topic', max_length=255)
-    level = models.CharField('level', max_length=255)
-    voted_for = models.NullBooleanField('voted for', null=True)
-    available = models.NullBooleanField('available', null=True)
-    checked = models.NullBooleanField('checked', null=True)
+    level = models.CharField('level', max_length=255, null=True, blank=True, default='Bachelor')
+    voted_for = models.NullBooleanField('voted for', null=True, blank=True)
+    available = models.NullBooleanField('available', null=True, blank=True)
+    checked = models.NullBooleanField('checked', null=True, blank=True)
     REQUIRED_FIELDS = ['name', ]
 
     def __str__(self):
@@ -184,8 +191,8 @@ class Review(models.Model):
         verbose_name='reviewed topic',
         related_name='reviewed_topic'
     )
-    is_finished = models.BooleanField("is finished")
-    finished_date = models.DateTimeField("finished date", default=timezone.now)
+    is_finished = models.BooleanField('is finished')
+    finished_date = models.DateTimeField('finished date', default=timezone.now)
 
 
 class Defense(models.Model):
