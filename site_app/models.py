@@ -84,8 +84,7 @@ class Topic(models.Model):
         on_delete=models.CASCADE,
         verbose_name='topic owner'
     )
-
-    student = models.ForeignKey(
+    supervisor = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         verbose_name='topic supervisor'
