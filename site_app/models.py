@@ -14,7 +14,7 @@ class Faculty(models.Model):
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, first_name, last_name, degree, faculty, type, department, password=None):
+    def create_user(self, email, first_name=None, last_name=None, degree=None, faculty=None, type=None, department=None, password=None):
         # Creates a user with a given data
         if not email:
             raise ValueError('Users must have an email address')
@@ -33,7 +33,7 @@ class UserManager(BaseUserManager):
         user.save()
         return user
 
-    def create_superuser(self, email, first_name, last_name, degree, faculty, type, department, password):
+    def create_superuser(self, email, password, first_name=None, last_name=None, degree=None, faculty=None, type=None, department=None):
         # Creates a superuser with a given data
         user = self.create_user(
             email=self.normalize_email(email),
@@ -52,13 +52,13 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
 
-    first_name = models.CharField('first name', max_length=255, blank=True)
-    last_name = models.CharField('last name', max_length=255, blank=True)
-    degree = models.CharField('degree', max_length=50, blank=True)
+    first_name = models.CharField('first name', max_length=255, null=True)
+    last_name = models.CharField('last name', max_length=255, null=True)
+    degree = models.CharField('degree', max_length=50, null=True)
     email = models.EmailField('email address', blank=False, unique=True)
-    department = models.CharField('user department', max_length=4, blank=True)
-    faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE, blank=True, verbose_name='user faculty')
-    type = models.ForeignKey(UserType, on_delete=models.CASCADE, blank=True, verbose_name='user type')
+    department = models.CharField('user department', max_length=4, null=True)
+    faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE, null=True, verbose_name='user faculty')
+    type = models.ForeignKey(UserType, on_delete=models.CASCADE, null=True, verbose_name='user type')
     # password is inherited
     is_admin = models.BooleanField('is admin', default=False)
     objects = UserManager()
