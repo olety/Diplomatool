@@ -1,4 +1,5 @@
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
+from django.contrib.auth.models import PermissionsMixin
 from django.core.mail import send_mail
 from django.db import models
 from django.utils import timezone
@@ -14,43 +15,34 @@ class Faculty(models.Model):
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, first_name=None, last_name=None, degree=None, faculty=None, type=None, department=None, password=None):
+    def create_user(self, email, **kwargs):
         # Creates a user with a given data
         if not email:
             raise ValueError('Users must have an email address')
 
         user = self.model(
             email=self.normalize_email(email),
-            first_name=first_name,
-            last_name=last_name,
-            degree=degree,
-            faculty=faculty,
-            type=type,
-            department=department
+
+            **kwargs
         )
 
-        user.set_password(password)
+        user.set_password(kwargs.get('password', ''))
         user.save()
         return user
 
-    def create_superuser(self, email, password, first_name=None, last_name=None, degree=None, faculty=None, type=None, department=None):
+    def create_superuser(self, email, password, **kwargs):
         # Creates a superuser with a given data
         user = self.create_user(
             email=self.normalize_email(email),
-            first_name=first_name,
-            last_name=last_name,
-            degree=degree,
-            faculty=faculty,
-            type=type,
-            department=department,
-            password=password
+            password=password,
+            **kwargs
         )
         user.is_admin = True
         user.save()
         return user
 
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
 
     first_name = models.CharField('first name', max_length=255, null=True)
     last_name = models.CharField('last name', max_length=255, null=True)
@@ -61,6 +53,15 @@ class User(AbstractBaseUser):
     type = models.ForeignKey(UserType, on_delete=models.CASCADE, null=True, verbose_name='user type')
     # password is inherited
     is_admin = models.BooleanField('is admin', default=False)
+
+    @property
+    def is_staff(self):
+        return self.is_admin
+
+    @property
+    def is_superuser(self):
+        return self.is_admin
+
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
