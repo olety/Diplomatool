@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
-from site_app.models import User, UserType, Faculty, Topic
+from site_app.models import User, UserType, Faculty, Topic, Thesis, Review, Defense
 from site_app import forms
 
 
@@ -56,57 +56,21 @@ class UserAdmin(BaseUserAdmin):
     filter_horizontal = ()
 
 
-class ThesisCreationForm(forms.ModelForm):
-    class Meta:
-        model = Thesis
-        fields = ('supervisor', 'student', 'topic', 'finished', 'reviewed', 'short_description')
-
-
-class ThesisChangeForm(forms.ModelForm):
-    class Meta:
-        model = Thesis
-        fields = ('supervisor', 'student', 'topic', 'finished', 'reviewed', 'short_description')
-
-
 class ThesisAdmin(admin.ModelAdmin):
-    form = ThesisChangeForm
-    add_form = ThesisChangeForm
+    form = forms.ThesisChangeForm
+    add_form = forms.ThesisChangeForm
     list_display = ('supervisor', 'student', 'topic', 'finished', 'reviewed', 'short_description')
 
 
-class ReviewCreationForm(forms.ModelForm):
-    class Meta:
-        model = Review
-        fields = ('thesis', 'topic', 'is_finished', 'finished_date')
-
-
-class ReviewChangeForm(forms.ModelForm):
-    class Meta:
-        model = Review
-        fields = ('thesis', 'topic', 'is_finished', 'finished_date')
-
-
 class ReviewAdmin(admin.ModelAdmin):
-    form = ReviewChangeForm
-    add_form = ReviewCreationForm
+    form = forms.ReviewChangeForm
+    add_form = forms.ReviewCreationForm
     list_display = ('thesis', 'topic', 'is_finished', 'finished_date')
 
 
-class DefenseCreationForm(forms.ModelForm):
-    class Meta:
-        model = Defense
-        fields = ('thesis', 'date', 'successful', 'second_defense')
-
-
-class DefenseChangeForm(forms.ModelForm):
-    class Meta:
-        model = Defense
-        fields = ('thesis', 'date', 'successful', 'second_defense')
-
-
 class DefenseAdmin(admin.ModelAdmin):
-    form = DefenseChangeForm
-    add_form = DefenseCreationForm
+    form = forms.DefenseChangeForm
+    add_form = forms.DefenseCreationForm
     list_display = ('thesis', 'date', 'successful', 'second_defense')
 
 

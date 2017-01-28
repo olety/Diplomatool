@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
-from site_app.models import User, UserType, Faculty, Topic
+from site_app.models import User, UserType, Faculty, Topic, Thesis, Review, Defense
 
 
 class UserTypeCreationForm(forms.ModelForm):
@@ -79,3 +79,38 @@ class UserChangeForm(forms.ModelForm):
         # field does not have access to the initial value
         return self.initial['password']
 
+
+class ThesisCreationForm(forms.ModelForm):
+    class Meta:
+        model = Thesis
+        fields = ('supervisor', 'student', 'topic', 'finished', 'reviewed', 'short_description')
+
+
+class ThesisChangeForm(forms.ModelForm):
+    class Meta:
+        model = Thesis
+        fields = ('supervisor', 'student', 'topic', 'finished', 'reviewed', 'short_description')
+
+
+class ReviewCreationForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ('thesis', 'topic', 'is_finished', 'finished_date')
+
+
+class ReviewChangeForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ('thesis', 'topic', 'is_finished', 'finished_date')
+
+
+class DefenseCreationForm(forms.ModelForm):
+    class Meta:
+        model = Defense
+        fields = ('thesis', 'date', 'successful', 'second_defense')
+
+
+class DefenseChangeForm(forms.ModelForm):
+    class Meta:
+        model = Defense
+        fields = ('thesis', 'date', 'successful', 'second_defense')
