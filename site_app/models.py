@@ -73,23 +73,26 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Topic(models.Model):
-    level = models.CharField(max_length=255)
-    voted_for = models.BooleanField()
-    available = models.BooleanField()
-    checked = models.BooleanField()
+    level = models.CharField("Level", max_length=255)
+    voted_for = models.BooleanField("Voted for")
+    available = models.BooleanField("Available")
+    checked = models.BooleanField("Checked")
 
 
 class Faculty(models.Model):
-    code = models.CharField(max_length=4)
-    name = models.CharField(max_length=255)
+    code = models.CharField("Faculty code", max_length=4)
+    name = models.CharField("Faculty name", max_length=255)
 
 
 class Review(models.Model):
-    is_finished = models.BooleanField()
-    finished_date = models.DateTimeField(default=timezone.now())
+    is_finished = models.BooleanField("Is finished")
+    finished_date = models.DateTimeField("Finished date", default=timezone.now())
 
 
 class Thesis(models.Model):
+    supervisor = models.ForeignKey(
+        'User',
+    )
     finished = models.BooleanField()
     reviewed = models.BooleanField()
     short_description = models.CharField(max_length=255)
