@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.contrib.auth.models import Group
 from site_app.models import User, Faculty, Topic, Thesis, Review, Defense
 from site_app import forms
 
@@ -59,7 +58,7 @@ class ThesisAdmin(admin.ModelAdmin):
 class ReviewAdmin(admin.ModelAdmin):
     form = forms.ReviewChangeForm
     add_form = forms.ReviewCreationForm
-    list_display = ('thesis', 'topic', 'is_finished', 'finished_date')
+    list_display = ('author', 'thesis', 'is_finished', 'finished_date')
 
 
 class DefenseAdmin(admin.ModelAdmin):
@@ -69,7 +68,6 @@ class DefenseAdmin(admin.ModelAdmin):
 
 
 # Registering models
-# admin.site.unregister(Group)
 admin.site.register(User, UserAdmin)
 admin.site.register(Faculty, FacultyAdmin)
 admin.site.register(Topic, TopicAdmin)

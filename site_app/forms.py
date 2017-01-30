@@ -83,13 +83,13 @@ class ThesisChangeForm(forms.ModelForm):
 class ReviewCreationForm(forms.ModelForm):
     class Meta:
         model = Review
-        fields = ('thesis', 'topic', 'is_finished', 'finished_date')
+        fields = ('author', 'thesis', 'is_finished', 'finished_date')
 
 
 class ReviewChangeForm(forms.ModelForm):
     class Meta:
         model = Review
-        fields = ('thesis', 'topic', 'is_finished', 'finished_date')
+        fields = ('author', 'thesis', 'is_finished', 'finished_date')
 
 
 class DefenseCreationForm(forms.ModelForm):

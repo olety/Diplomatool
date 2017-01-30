@@ -3,6 +3,7 @@ from django.contrib.auth.models import PermissionsMixin, Group
 from django.core.mail import send_mail
 from django.utils import timezone
 from django.db import models
+from model_utils import Choices
 
 
 class Faculty(models.Model):
@@ -109,12 +110,13 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Topic(models.Model):
 
+    LEVELS = Choices('Bachelor', 'Master', 'Doctor')
     student = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='topic owner',
                                 related_name='topic_owner', null=True, blank=True)
     supervisor = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='topic supervisor',
                                    related_name='topic_supervisor', null=True, blank=True)
     name = models.CharField('topic', max_length=255)
-    level = models.CharField('level', max_length=255, null=True, blank=True, default='Bachelor')
+    level = models.CharField('level', max_length=255, null=True, blank=True, choices=LEVELS, default=LEVELS.Bachelor)
     voted_for = models.NullBooleanField('voted for', null=True, blank=True)
     available = models.NullBooleanField('available', null=True, blank=True)
     checked = models.NullBooleanField('checked', null=True, blank=True)
@@ -165,8 +167,7 @@ class Review(models.Model):
                                verbose_name='review author', related_name='review_author')
     thesis = models.ForeignKey(Thesis, on_delete=models.CASCADE,
                                verbose_name='reviewed thesis', related_name='reviewed_thesis')
-    topic = models.ForeignKey(Topic, on_delete=models.CASCADE,
-                              verbose_name='reviewed topic', related_name='reviewed_topic')
+    # We can reference a topic via thesis
     is_finished = models.BooleanField('is finished')
     finished_date = models.DateTimeField('finished date', default=timezone.now)
 
