@@ -1,18 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
-from site_app.models import User, UserType, Faculty, Topic, Thesis, Review, Defense
-
-
-class UserTypeCreationForm(forms.ModelForm):
-    class Meta:
-        model = UserType
-        fields = ('type_name',)
-
-
-class UserTypeChangeForm(forms.ModelForm):
-    class Meta:
-        model = UserType
-        fields = ('type_name',)
+from site_app.models import User, Faculty, Topic, Thesis, Review, Defense
 
 
 class FacultyCreationForm(forms.ModelForm):
@@ -83,13 +71,13 @@ class UserChangeForm(forms.ModelForm):
 class ThesisCreationForm(forms.ModelForm):
     class Meta:
         model = Thesis
-        fields = ('supervisor', 'student', 'topic', 'finished', 'reviewed', 'short_description')
+        fields = ('supervisor', 'student', 'topic', 'finished', 'short_description')
 
 
 class ThesisChangeForm(forms.ModelForm):
     class Meta:
         model = Thesis
-        fields = ('supervisor', 'student', 'topic', 'finished', 'reviewed', 'short_description')
+        fields = ('supervisor', 'student', 'topic', 'finished', 'short_description')
 
 
 class ReviewCreationForm(forms.ModelForm):

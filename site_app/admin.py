@@ -1,14 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
-from site_app.models import User, UserType, Faculty, Topic, Thesis, Review, Defense
+from site_app.models import User, Faculty, Topic, Thesis, Review, Defense
 from site_app import forms
-
-
-class UserTypeAdmin(admin.ModelAdmin):
-    form = forms.UserTypeChangeForm
-    add_form = forms.UserTypeCreationForm
-    list_display = ('type_name',)
 
 
 class FacultyAdmin(admin.ModelAdmin):
@@ -31,7 +25,7 @@ class UserAdmin(BaseUserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ('email', 'first_name', 'last_name', 'degree', 'faculty', 'type', 'department', 'is_admin')
+    list_display = ('email', 'first_name', 'last_name', 'degree', 'faculty', 'department', 'is_admin')
     list_filter = ('is_admin',)
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
@@ -40,7 +34,7 @@ class UserAdmin(BaseUserAdmin):
                         'last_name',
                         'degree',
                         'faculty',
-                        'type',
+                        'groups',
                         'department')}),
         ('Permissions', {'fields': ('is_admin',)}),
     )
@@ -75,9 +69,8 @@ class DefenseAdmin(admin.ModelAdmin):
 
 
 # Registering models
-admin.site.unregister(Group)
+# admin.site.unregister(Group)
 admin.site.register(User, UserAdmin)
-admin.site.register(UserType, UserTypeAdmin)
 admin.site.register(Faculty, FacultyAdmin)
 admin.site.register(Topic, TopicAdmin)
 admin.site.register(Thesis, ThesisAdmin)

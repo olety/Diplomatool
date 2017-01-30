@@ -1,22 +1,8 @@
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
-from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth.models import PermissionsMixin, Group
 from django.core.mail import send_mail
 from django.utils import timezone
 from django.db import models
-
-
-class UserType(models.Model):
-    type_name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.get_full_name()
-
-    def get_full_name(self):
-        full_name = 'Type: {}'.format(self.type_name)
-        return full_name.strip()
-
-    def get_short_name(self):
-        return self.type_name
 
 
 class Faculty(models.Model):
@@ -78,8 +64,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     department = models.CharField('user department', max_length=4, null=True, blank=True)
     faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE, null=True,
                                 blank=True, verbose_name='user faculty')
-    type = models.ForeignKey(UserType, on_delete=models.CASCADE, null=True,
-                             blank=True, verbose_name='user type')
     # password is inherited
     is_admin = models.BooleanField('is admin', default=False)
 
@@ -90,6 +74,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def is_superuser(self):
         return self.is_admin
+
+    @property
+    def is_reviewer(self):
+        return self.is_staff or self.groups.filter(name='Reviewer')
+
+    @property
+    def is_student(self):
+        return self.is_staff or self.groups.filter(name='Student')
 
     objects = UserManager()
 
@@ -153,8 +145,12 @@ class Thesis(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE,
                               verbose_name='thesis topic', related_name='thesis_topic')
     finished = models.BooleanField('finished')
-    reviewed = models.BooleanField('reviewed')
+
     short_description = models.CharField('short description', max_length=255)
+
+    @property
+    def reviewed(self):
+        return Review.objects.filter(thesis__id=self.id).exists()
 
     def __str__(self):
         return self.get_thesis_name()
@@ -165,6 +161,8 @@ class Thesis(models.Model):
 
 
 class Review(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE,
+                               verbose_name='review author', related_name='review_author')
     thesis = models.ForeignKey(Thesis, on_delete=models.CASCADE,
                                verbose_name='reviewed thesis', related_name='reviewed_thesis')
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE,

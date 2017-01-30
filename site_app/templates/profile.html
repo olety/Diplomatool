@@ -1,0 +1,30 @@
+{% extends 'generic/header.html' %}
+
+{% block navbar-nav %}
+    <li class="active"><a href="{% url 'profile' %}">Profile</a></li>
+    {% if user.is_reviewer %}
+        <li><a href="{% url 'reviews' %}">Reviews</a></li>
+    {% endif %}
+{% endblock %}
+
+{% block navbar-right %}
+    {# User is already logged in #}
+    <p class="navbar-text">
+        <span class="glyphicon glyphicon glyphicon-user"></span> {{ user.first_name }} {{ user.last_name }}
+    </p>
+    <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon glyphicon-log-out"></span> Sign out</a></li>
+{% endblock %}
+
+{% block jumbo %}
+    <h1>Profile page</h1>
+    <p>
+        {% if user.is_reviewer %}
+            You are a reviewer, {{ user.first_name }}!
+        {% endif %}
+    </p>
+    <p>
+        {% if user.is_student %}
+            You are a student, {{ user.first_name }}!
+        {% endif %}
+    </p>
+{% endblock %}

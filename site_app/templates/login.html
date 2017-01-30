@@ -1,0 +1,64 @@
+{% extends 'generic/header.html' %}
+{% block custom_css %}
+    .input-group-addon {
+    min-width:90px;
+    text-align:center;
+    }
+
+    .center-text {
+    text-align:center;
+    }
+
+    .spacer {
+        margin:0;
+        padding:0;
+        height:50px;
+    }
+
+    #jumbo {
+        padding-top: 2.55em;
+        padding-bottom: 2.55em;
+        padding-right: 2.55em;
+        padding-left: 2.55em;
+    }
+{% endblock %}
+
+{% block title %}
+    Diplomatool - Login
+{% endblock %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="spacer"></div>
+        <div class="row">
+            <div class="col-md-4 col-md-offset-3">
+                <div class="jumbotron" id="jumbo">
+                    <img class="img-responsive img-rounded" src="http://i.imgur.com/3GO7pje.png">
+                    <h3 class="center-text">Diplomatool</h3>
+                    <div class="spacer"></div>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="addon1">Email</span>
+                                <input type="text" autofocus="" name="username" maxlength="254" class="form-control"
+                                       placeholder="name.surname@pwr.edu.pl" aria-describedby="addon1" required>
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon" id="addon2">Password</span>
+                                <input type="password" name="password" maxlength="128" class="form-control"
+                                       placeholder=""
+                                       aria-describedby="addon2" required/>
+
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Login</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
