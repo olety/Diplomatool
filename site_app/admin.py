@@ -58,7 +58,7 @@ class ThesisAdmin(admin.ModelAdmin):
 class ReviewAdmin(admin.ModelAdmin):
     form = forms.ReviewChangeForm
     add_form = forms.ReviewCreationForm
-    list_display = ('author', 'thesis', 'is_finished', 'finished_date')
+    list_display = ('author', 'thesis', 'finished', 'finished_date')
 
 
 class DefenseAdmin(admin.ModelAdmin):

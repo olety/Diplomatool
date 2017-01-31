@@ -147,7 +147,7 @@ class Thesis(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE,
                               verbose_name='thesis topic', related_name='thesis_topic')
     finished = models.BooleanField('finished')
-
+    finished_date = models.DateTimeField('finished date', default=timezone.now)
     short_description = models.CharField('short description', max_length=255)
 
     @property
@@ -168,7 +168,7 @@ class Review(models.Model):
     thesis = models.ForeignKey(Thesis, on_delete=models.CASCADE,
                                verbose_name='reviewed thesis', related_name='reviewed_thesis')
     # We can reference a topic via thesis
-    is_finished = models.BooleanField('is finished')
+    finished = models.BooleanField('finished')
     finished_date = models.DateTimeField('finished date', default=timezone.now)
 
     def __str__(self):
