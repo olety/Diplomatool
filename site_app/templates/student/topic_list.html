@@ -9,3 +9,28 @@
         <li class="active"><a href="{% url 'topic_list' %}">Topics</a></li>
     {% endif %}
 {% endblock %}
+
+{% block jumbo %}
+    <h1>Topics</h1>
+    Can't find the perfect one for you? <a class="btn btn-default btn-sm" href="#" role="button">Propose new</a>
+    <table class="table table-hover table-responsive">
+        <thead>
+           <tr>
+               <th>ID</th>
+               <th>Topic</th>
+               <th>Supervisor</th>
+               <th>Description</th>
+               <th>Action</th>
+           </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>Topic...</td>
+                <td>Andrzej Siemiński</td>
+                <td>Description...</td>
+                <td>Taz Dingo!</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}
