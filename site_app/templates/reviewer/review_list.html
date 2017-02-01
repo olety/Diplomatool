@@ -6,15 +6,6 @@
     <li class="active"><a href="{% url 'reviews' %}">Reviews</a></li>
 {% endblock %}
 
-{% block navbar-right %}
-    {# User is already logged in #}
-    <li>
-        <a href="{% url 'profile' %}">
-            <span class="glyphicon glyphicon glyphicon-user"></span> {{ user.first_name }} {{ user.last_name }}</a>
-    </li>
-    <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon glyphicon-log-out"></span> Sign out</a></li>
-{% endblock %}
-
 {% block jumbo %}
     <h1>Reviews</h1>
 
