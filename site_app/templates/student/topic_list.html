@@ -1,38 +1,76 @@
 {% extends 'generic/header.html' %}
 
+{% block custom_css %}
+    .table td {
+    text-align: center;
+    }
+
+    .table th {
+    text-align: center;
+    }
+
+    .spacer {
+    margin:0;
+    padding-top:50px;
+    padding-bottom:10px;
+    }
+
+    th.sort:before{
+    content:"\e150";
+    font-family:"Glyphicons Halflings";
+    padding-right: 14px;
+    }
+
+    th.sort.asc:before {
+    content:"\e093";
+    }
+
+    th.sort.desc:before {
+    content:"\e094";
+    }
+
+    #topic-form { display: none; }
+{% endblock %}
+
 {% block jumbo %}
     <h1>Topics</h1>
-    Can't find the perfect one for you? <a class="btn btn-default btn-sm" href="#" role="button">Propose new</a>
-    <table class="table table-hover table-responsive">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Topic</th>
-            <th>Supervisor</th>
-            <th>Description</th>
-            <th>Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% if topic_list %}
-            {% for topic in topic_list %}
+    <div class="spacer">
+        Can't find the perfect one for you? <a class="btn btn-default btn-sm" href="#" role="button" id="add-topic">Propose
+        new</a>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <table class="table table-hover table-responsive">
+                <thead>
                 <tr>
-                    <td>{{ topic.id }}</td>
-                    <td>{{ topic.name }}</td>
-                    <td>{{ topic.supervisor.first_name }} {{ topic.supervisor.last_name }}</td>
-                    <td>{{ topic.short_description }}</td>
-                    <td><input class="btn btn-default" type="button" value="Choose"></td>
+                    <th>ID</th>
+                    <th>Topic</th>
+                    <th>Supervisor</th>
+                    <th>Description</th>
+                    <th>Action</th>
                 </tr>
-            {% endfor %}
-        {% endif %}
-        </tbody>
-    </table>
+                </thead>
+                <tbody>
+                {% if topic_list %}
+                    {% for topic in topic_list %}
+                        <tr>
+                            <td>{{ topic.id }}</td>
+                            <td>{{ topic.name }}</td>
+                            <td>{{ topic.supervisor.first_name }} {{ topic.supervisor.last_name }}</td>
+                            <td>{{ topic.short_description }}</td>
+                            <td><input class="btn btn-default" type="button" value="Choose"></td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-    <div class="col-sm-6 hidden">
+    <div class="col-m-6" id="topic-form" title="Propose a topic">
         <div class="panel panel-default">
-            <div class="panel-heading">Topic</div>
             <div class="panel-body">
-                <form>
+                <form action="" method="post">
                     <div class="form-group">
                         <label for="name" class="control-label">Topic name</label>
                         <input type="text" class="form-control" id="name" placeholder="Topic name">
@@ -49,10 +87,38 @@
                         <label for="name" class="control-label">Short description</label>
                         <textarea class="form-control" rows="3"></textarea>
                     </div>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-default" id="cancel-topic-form">Cancel</button>
                 </form>
             </div>
         </div>
     </div>
 
+{% endblock %}
 
+
+{% block custom_js %}
+    <script>
+        $(document).ready(function () {
+            var dialog;
+            var topicButton = $('#add-topic');
+            var cancelButton = $('#cancel-topic-form');
+
+            dialog = $("#topic-form").dialog({
+                autoOpen: false,
+                height: 420,
+                width: 500,
+                modal: true,
+            });
+
+            topicButton.on('click', function () {
+                dialog.dialog('open');
+            })
+
+            cancelButton.on('click', function () {
+                dialog.dialog('close');
+            })
+        })
+    </script>
 {% endblock %}
