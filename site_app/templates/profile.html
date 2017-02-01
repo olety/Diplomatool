@@ -1,11 +1,21 @@
 {% extends 'generic/header.html' %}
 
 {% block navbar-nav %}
-    <li class="active"><a href="{% url 'profile' %}">Profile</a></li>
+    <li class="active">
+        <a href="{% url 'profile' %}">Profile</a>
+    </li>
     {% if user.is_reviewer %}
-        <li><a href="{% url 'reviews' %}">Reviews</a></li>
+        <li>
+            <a href="{% url 'reviews' %}">Reviews
+            </a>
+        </li>
     {% endif %}
-    <li><a href="{% url 'topic_list' %}">Topics</a></li>
+    {% if user.is_student %}
+    <li>
+        <a href="{% url 'topic_list' %}">Topics
+        </a>
+    </li>
+    {% endif %}
 {% endblock %}
 
 

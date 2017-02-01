@@ -4,6 +4,7 @@ from django.core.mail import send_mail
 from django.utils import timezone
 from django.db import models
 from model_utils import Choices
+from datetime import timedelta
 
 
 class Faculty(models.Model):
@@ -55,7 +56,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-
+    index_number = models.CharField('index number', max_length=10, default='000001')
     first_name = models.CharField('first name', max_length=255,
                                   null=True, blank=True, default='Name')
     last_name = models.CharField('last name', max_length=255,
@@ -177,6 +178,10 @@ class Review(models.Model):
     # We can reference a topic via thesis
     finished = models.BooleanField('finished')
     finished_date = models.DateTimeField('finished date', default=timezone.now)
+
+    @property
+    def deadline(self):
+        return self.thesis.finished_date.date() + timedelta(weeks=2)
 
     def get_file_path(self, filename):
         file_ext = filename.split('.')[-1]

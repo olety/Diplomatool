@@ -9,6 +9,7 @@
             padding-top: 65px;
         }
 
+
         {% block custom_css %}
         {% endblock %}
     </style>
@@ -66,10 +67,12 @@
         {% endblock %}
     </div>
 {% endblock %}
-
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"
         integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
         crossorigin="anonymous"></script>
 <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+{% block custom_js %}
+{% endblock %}
 </body>
 </html>

@@ -1,19 +1,108 @@
 {% extends 'generic/header.html' %}
 
+{% block title %}
+    Dimplomatool - Reviews
+{% endblock %}
+
+{% block custom_css %}
+    .table td {
+    text-align: center;
+    }
+
+    .table th {
+    text-align: center;
+    }
+
+    .spacer {
+    margin:0;
+    padding:0;
+    height:50px;
+    }
+
+    th.sort:before{
+        content:"\e150";
+        font-family:"Glyphicons Halflings";
+        padding-right: 14px;
+    }
+
+    th.sort.asc:before {
+        content:"\e093";
+    }
+
+    th.sort.desc:before {
+        content:"\e094";
+    }
+{% endblock %}
+
 {% block navbar-nav %}
     <li><a href="{% url 'profile' %}">Profile</a></li>
     {# User is already a reviewer #}
     <li class="active"><a href="{% url 'reviews' %}">Reviews</a></li>
-     {% if user.is_student %}
+    {% if user.is_student %}
         <li><a href="{% url 'topic_list' %}">Topics</a></li>
     {% endif %}
 {% endblock %}
 
 {% block jumbo %}
     <h1>Reviews</h1>
-    {% if review_list %}
-        {% for review in review_list %}
-            {{ review }}
-        {% endfor %}
-    {% endif %}
+    <div id="reviews">
+        <input class="search" placeholder="Search"/>
+        <button class="sort" data-sort="review-finished">
+            Sort by compl
+        </button>
+        <div class="spacer"></div>
+        {% if review_list %}
+            <div class="table-responsive">
+                <table class="table table- table-hover">
+                    <tr>
+                        <th class="sort" data-sort="student-id">Student ID</th>
+                        <th class="sort" data-sort="student-name">Student Name</th>
+                        <th class="sort" data-sort="topic-name">Topic</th>
+                        <th class="sort" data-sort="review-finished">Review status</th>
+                        <th class="sort" data-sort="deadline">Deadline</th>
+                        <th>Action</th>
+                    </tr>
+                    <tbody class="list">
+                    {% for review in review_list %}
+                        <tr>
+                            <td class="student-id">
+                                {{ review.thesis.student.index_number }}
+                            </td>
+                            <td class="student-name">
+                                {{ review.thesis.student.get_full_name }}
+                            </td>
+                            <td class="topic-name">
+                                {{ review.thesis.topic.name }}
+                            </td>
+                            <td class="review-finished">
+                                {% if review.finished %}
+                                    True
+                                {% else %}
+                                    False
+                                {% endif %}
+                            </td>
+                            <td class="deadline">
+                                {{ review.deadline }}
+                            </td>
+                            <td class="action">
+                                <button class="btn"></button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            </div>
+        {% endif %}
+{% endblock %}
+
+
+{% block custom_js %}
+    <script>
+        var options = {
+            valueNames: ['student-id', 'student-name', 'topic-name', 'review-finished', 'deadline', 'action']
+        };
+
+        var reviewList = new List('reviews', options);
+    </script>
 {% endblock %}
