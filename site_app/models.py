@@ -182,7 +182,7 @@ class Review(models.Model):
         file_ext = filename.split('.')[-1]
         return 'theses/thesis_{0}/review.{1}'.format(self.thesis.id, file_ext)
 
-    file = models.FileField(upload_to=get_file_path, verbose_name='thesis file', null=True, blank=True)
+    file = models.FileField(upload_to=get_file_path, verbose_name='review file', null=True, blank=True)
 
     def __str__(self):
         return self.get_review_name()
