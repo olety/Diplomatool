@@ -7,6 +7,7 @@ from django.views.generic import TemplateView
 from functools import wraps
 from . import models
 
+
 def check_group(group_name):
     def _check_group(view_func):
         @wraps(view_func)
