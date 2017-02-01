@@ -103,4 +103,6 @@ class DefenseChangeForm(forms.ModelForm):
         model = Defense
         fields = ('thesis', 'date', 'successful', 'second_defense')
 
+
 class ReviewerForm(forms.ModelForm):
+    pass
