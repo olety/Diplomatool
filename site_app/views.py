@@ -28,8 +28,18 @@ class ProfileView(TemplateView):
 
 @method_decorator(login_required, name='dispatch')
 @method_decorator(check_group('Student'), name='dispatch')
-class TopicListView(TemplateView):
+class TopicListView(ListView):
     template_name = "student/topic_list.html"
+    model = models.Topic
+    context_object_name = 'topic_list'
+
+    def get_queryset(self):
+        return models.Topic.objects.filter(available=True)
+
+    def get_context_data(self, **kwargs):
+        context = super(TopicListView, self).get_context_data()
+        context['supervisors'] = models.User.objects.filter(groups__name='Supervisor')
+        return context
 
 
 @method_decorator(login_required, name='dispatch')

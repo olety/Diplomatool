@@ -20,27 +20,18 @@
     }
 
     th.sort:before{
-        content:"\e150";
-        font-family:"Glyphicons Halflings";
-        padding-right: 14px;
+    content:"\e150";
+    font-family:"Glyphicons Halflings";
+    padding-right: 14px;
     }
 
     th.sort.asc:before {
-        content:"\e093";
+    content:"\e093";
     }
 
     th.sort.desc:before {
-        content:"\e094";
+    content:"\e094";
     }
-{% endblock %}
-
-{% block navbar-nav %}
-    <li><a href="{% url 'profile' %}">Profile</a></li>
-    {# User is already a reviewer #}
-    <li class="active"><a href="{% url 'reviews' %}">Reviews</a></li>
-    {% if user.is_student %}
-        <li><a href="{% url 'topic_list' %}">Topics</a></li>
-    {% endif %}
 {% endblock %}
 
 {% block jumbo %}

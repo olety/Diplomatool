@@ -9,7 +9,6 @@
             padding-top: 65px;
         }
 
-
         {% block custom_css %}
         {% endblock %}
     </style>
@@ -38,6 +37,13 @@
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     {% block navbar-nav %}
+                        <li><a href="{% url 'profile' %}">Profile</a></li>
+                        {% if user.is_reviewer %}
+                            <li><a href="{% url 'reviews' %}">Reviews</a></li>
+                        {% endif %}
+                        {% if user.is_student %}
+                            <li><a href="{% url 'topic_list' %}">Topics</a></li>
+                        {% endif %}
                     {% endblock %}
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -72,6 +78,15 @@
         crossorigin="anonymous"></script>
 <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+<script>
+    var links = $('[class$="navbar-nav"] li a');
+    links.each(function () {
+        var self = $(this);
+        if (self.attr('href') == window.location.pathname) {
+            self.parent().addClass('active');
+        }
+    })
+</script>
 {% block custom_js %}
 {% endblock %}
 </body>

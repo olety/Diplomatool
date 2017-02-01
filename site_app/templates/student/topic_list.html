@@ -1,36 +1,58 @@
 {% extends 'generic/header.html' %}
 
-{% block navbar-nav %}
-    <li><a href="{% url 'profile' %}">Profile</a></li>
-    {% if user.is_reviewer %}
-        <li><a href="{% url 'reviews' %}">Reviews</a></li>
-    {% endif %}
-    {% if user.is_student %}
-        <li class="active"><a href="{% url 'topic_list' %}">Topics</a></li>
-    {% endif %}
-{% endblock %}
-
 {% block jumbo %}
     <h1>Topics</h1>
     Can't find the perfect one for you? <a class="btn btn-default btn-sm" href="#" role="button">Propose new</a>
     <table class="table table-hover table-responsive">
         <thead>
-           <tr>
-               <th>ID</th>
-               <th>Topic</th>
-               <th>Supervisor</th>
-               <th>Description</th>
-               <th>Action</th>
-           </tr>
+        <tr>
+            <th>ID</th>
+            <th>Topic</th>
+            <th>Supervisor</th>
+            <th>Description</th>
+            <th>Action</th>
+        </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>1</td>
-                <td>Topic...</td>
-                <td>Andrzej Siemiński</td>
-                <td>Description...</td>
-                <td>Taz Dingo!</td>
-            </tr>
+        {% if topic_list %}
+            {% for topic in topic_list %}
+                <tr>
+                    <td>{{ topic.id }}</td>
+                    <td>{{ topic.name }}</td>
+                    <td>{{ topic.supervisor.first_name }} {{ topic.supervisor.last_name }}</td>
+                    <td>{{ topic.short_description }}</td>
+                    <td><input class="btn btn-default" type="button" value="Choose"></td>
+                </tr>
+            {% endfor %}
+        {% endif %}
         </tbody>
     </table>
+
+    <div class="col-sm-6 hidden">
+        <div class="panel panel-default">
+            <div class="panel-heading">Topic</div>
+            <div class="panel-body">
+                <form>
+                    <div class="form-group">
+                        <label for="name" class="control-label">Topic name</label>
+                        <input type="text" class="form-control" id="name" placeholder="Topic name">
+                    </div>
+                    <div class="form-group">
+                        <label for="supervisor" class="control-label">Supervisor</label>
+                        <select class="form-control" id="supervisor">
+                            {% for supervisor in supervisors %}
+                                <option value={{ supervisor.id }}>{{ supervisor.first_name }} {{ supervisor.last_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="control-label">Short description</label>
+                        <textarea class="form-control" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
 {% endblock %}

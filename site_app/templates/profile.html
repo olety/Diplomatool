@@ -1,7 +1,7 @@
 {% extends 'generic/header.html' %}
 
 {% block navbar-nav %}
-    <li class="active">
+    <li>
         <a href="{% url 'profile' %}">Profile</a>
     </li>
     {% if user.is_reviewer %}
@@ -11,10 +11,10 @@
         </li>
     {% endif %}
     {% if user.is_student %}
-    <li>
-        <a href="{% url 'topic_list' %}">Topics
-        </a>
-    </li>
+        <li>
+            <a href="{% url 'topic_list' %}">Topics
+            </a>
+        </li>
     {% endif %}
 {% endblock %}
 
