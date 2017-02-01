@@ -5,6 +5,7 @@
     {% if user.is_reviewer %}
         <li><a href="{% url 'reviews' %}">Reviews</a></li>
     {% endif %}
+    <li><a href="{% url 'topic_list' %}">Topics</a></li>
 {% endblock %}
 
 

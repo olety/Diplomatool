@@ -4,6 +4,9 @@
     <li><a href="{% url 'profile' %}">Profile</a></li>
     {# User is already a reviewer #}
     <li class="active"><a href="{% url 'reviews' %}">Reviews</a></li>
+     {% if user.is_student %}
+        <li><a href="{% url 'topic_list' %}">Topics</a></li>
+    {% endif %}
 {% endblock %}
 
 {% block jumbo %}

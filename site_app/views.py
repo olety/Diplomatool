@@ -27,3 +27,8 @@ class ProfileView(TemplateView):
 class ReviewsView(TemplateView):
     template_name = "reviewer/review_list.html"
 
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(check_group('Student'), name='dispatch')
+class TopicListView(TemplateView):
+    template_name = "student/topic_list.html"
