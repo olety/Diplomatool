@@ -18,13 +18,13 @@ class FacultyChangeForm(forms.ModelForm):
 class TopicCreationForm(forms.ModelForm):
     class Meta:
         model = Topic
-        fields = ('name', 'student', 'supervisor', 'level', 'voted_for', 'available', 'checked')
+        fields = ('name', 'student', 'supervisor', 'short_description', 'level', 'voted_for', 'available', 'checked')
 
 
 class TopicChangeForm(forms.ModelForm):
     class Meta:
         model = Topic
-        fields = ('name', 'student', 'supervisor', 'level', 'voted_for', 'available', 'checked')
+        fields = ('name', 'student', 'supervisor', 'short_description', 'level', 'voted_for', 'available', 'checked')
 
 
 class UserCreationForm(forms.ModelForm):
@@ -71,13 +71,13 @@ class UserChangeForm(forms.ModelForm):
 class ThesisCreationForm(forms.ModelForm):
     class Meta:
         model = Thesis
-        fields = ('supervisor', 'student', 'topic', 'finished', 'short_description')
+        fields = ('supervisor', 'student', 'topic', 'finished')
 
 
 class ThesisChangeForm(forms.ModelForm):
     class Meta:
         model = Thesis
-        fields = ('supervisor', 'student', 'topic', 'finished', 'short_description')
+        fields = ('supervisor', 'student', 'topic', 'finished')
 
 
 class ReviewCreationForm(forms.ModelForm):
@@ -102,3 +102,5 @@ class DefenseChangeForm(forms.ModelForm):
     class Meta:
         model = Defense
         fields = ('thesis', 'date', 'successful', 'second_defense')
+
+class ReviewerForm(forms.ModelForm):

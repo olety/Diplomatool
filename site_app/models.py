@@ -120,6 +120,7 @@ class Topic(models.Model):
     voted_for = models.NullBooleanField('voted for', null=True, blank=True)
     available = models.NullBooleanField('available', null=True, blank=True)
     checked = models.NullBooleanField('checked', null=True, blank=True)
+    short_description = models.CharField('short description', max_length=255, null=True, blank=True)
     REQUIRED_FIELDS = ['name', ]
 
     def __str__(self):
@@ -134,6 +135,7 @@ class Topic(models.Model):
 
 
 class Thesis(models.Model):
+
     class Meta:
         app_label = 'site_app'
         verbose_name = 'thesis'
@@ -148,7 +150,12 @@ class Thesis(models.Model):
                               verbose_name='thesis topic', related_name='thesis_topic')
     finished = models.BooleanField('finished')
     finished_date = models.DateTimeField('finished date', default=timezone.now)
-    short_description = models.CharField('short description', max_length=255)
+
+    def get_file_path(self, filename):
+        # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+        return 'theses/student_{0}/{1}'.format(self.student.id, filename)
+
+    file = models.FileField(upload_to=get_file_path, verbose_name='thesis file', null=True, blank=True)
 
     @property
     def reviewed(self):

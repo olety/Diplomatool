@@ -9,9 +9,10 @@
 
 {% block navbar-right %}
     {# User is already logged in #}
-    <p class="navbar-text">
-        <span class="glyphicon glyphicon glyphicon-user"></span> {{ user.first_name }} {{ user.last_name }}
-    </p>
+    <li>
+        <a href="{% url 'profile' %}"> <span class="glyphicon glyphicon glyphicon-user"></span>
+            {{ user.first_name }} {{ user.last_name }}</a>
+    </li>
     <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon glyphicon-log-out"></span> Sign out</a></li>
 {% endblock %}
 

@@ -13,7 +13,7 @@ class FacultyAdmin(admin.ModelAdmin):
 class TopicAdmin(admin.ModelAdmin):
     form = forms.TopicChangeForm
     add_form = forms.TopicCreationForm
-    list_display = ('name', 'student', 'supervisor', 'level', 'voted_for', 'available', 'checked')
+    list_display = ('name', 'student', 'supervisor', 'level', 'short_description', 'voted_for', 'available', 'checked')
 
 
 class UserAdmin(BaseUserAdmin):
@@ -52,7 +52,7 @@ class UserAdmin(BaseUserAdmin):
 class ThesisAdmin(admin.ModelAdmin):
     form = forms.ThesisChangeForm
     add_form = forms.ThesisChangeForm
-    list_display = ('supervisor', 'student', 'topic', 'finished', 'reviewed', 'short_description')
+    list_display = ('supervisor', 'student', 'topic', 'finished', 'reviewed')
 
 
 class ReviewAdmin(admin.ModelAdmin):
