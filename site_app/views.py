@@ -24,8 +24,15 @@ class ProfileView(TemplateView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(check_group('Student'), name='dispatch')
+class TopicListView(TemplateView):
+    template_name = "student/topic_list.html"
+
+
+@method_decorator(login_required, name='dispatch')
 @method_decorator(check_group('Reviewer'), name='dispatch')
-class ReviewsView(ListView):
+class ReviewListView(ListView):
+    template_name = "reviewer/review_list.html"
 
     model = models.Review
     context_object_name = 'review_list'
@@ -33,3 +40,4 @@ class ReviewsView(ListView):
 
     def get_queryset(self):
         return models.Review.objects.filter(author=self.request.user)
+
