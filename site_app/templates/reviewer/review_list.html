@@ -8,5 +8,9 @@
 
 {% block jumbo %}
     <h1>Reviews</h1>
-
+    {% if review_list %}
+        {% for review in review_list %}
+            {{ review }}
+        {% endfor %}
+    {% endif %}
 {% endblock %}

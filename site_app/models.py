@@ -188,7 +188,7 @@ class Review(models.Model):
         return self.get_review_name()
 
     def get_review_name(self):
-        review_name = 'Review: {} {}'.format(self.id, self.thesis.get_thesis_name())
+        review_name = 'Review #{} by {} of {}'.format(self.id, self.author, self.thesis.get_thesis_name())
         return review_name.strip()
 
 
