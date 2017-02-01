@@ -7,6 +7,7 @@ from django.views.generic import TemplateView
 from functools import wraps
 from . import models
 
+
 def check_group(group_name):
     def _check_group(view_func):
         @wraps(view_func)
@@ -33,10 +34,8 @@ class TopicListView(TemplateView):
 @method_decorator(check_group('Reviewer'), name='dispatch')
 class ReviewListView(ListView):
     template_name = "reviewer/review_list.html"
-
     model = models.Review
     context_object_name = 'review_list'
-    template_name = 'reviewer/review_list.html'
 
     def get_queryset(self):
         return models.Review.objects.filter(author=self.request.user)
