@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import redirect
@@ -5,7 +6,6 @@ from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 from django.views.generic import TemplateView
 from functools import wraps
-
 from site_app.forms import ReviewUploadForm
 from . import models
 from . import forms
@@ -18,7 +18,9 @@ def check_group(group_name):
             if request.user.groups.filter(name=group_name).exists() or request.user.is_admin:
                 return view_func(request, *args, **kwargs)
             return redirect('/')
+
         return wrapper
+
     return _check_group
 
 
@@ -81,10 +83,11 @@ class ReviewListView(ListView):
         form = ReviewUploadForm(request.POST, request.FILES)
         if form.is_valid():
             review = models.Review.objects.get(id=request.POST.get('review_hidden_id'))
-            review.file = form.review_file
+            review.file = form.cleaned_data.get('review_file')
+            review.finished_date = timezone.now()
             review.save()
 
-        print(request.POST.get('review_file'))
+        print(review)
         self.object_list = self.get_queryset()
         context = self.get_context_data()
         context['sent_review'] = True

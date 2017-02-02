@@ -10,7 +10,6 @@
 {% block custom_css %}
     .table td {
     text-align: center;
-    vertical-align:middle;
     }
 
     .table th {
@@ -42,6 +41,9 @@
     content:"\e094";
     }
 
+    #center_table td {
+    vertical-align:middle;
+    }
 {% endblock %}
 
 {% block container %}
@@ -50,7 +52,7 @@
         <div class="alert alert-success alert-dismissible" role="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
                     aria-hidden="true">&times;</span></button>
-            <strong>Review upload complete!</strong>
+            <strong>Review upload complete!</strong> File has finished uploading.
         </div>
     {% endif %}
 
@@ -59,7 +61,7 @@
             <div class="panel-body">
                 <div id="reviews">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover" id="cssTable">
+                        <table class="table table-bordered table-hover" id="center_table">
                             <tr>
                                 <th class="sort" data-sort="student-id">Student ID</th>
                                 <th class="sort" data-sort="student-name">Student Name</th>
@@ -109,16 +111,14 @@
                     </div>
                 </div>
             </div>
-
         </div>
-
 
         <div class="col-m-6" id="review-upload-form" title="Upload a review">
             {% crispy form form.helper %}
         </div>
 
     {% else %}
-        <p>You have no pending reviews!</p>
+        <p>You have no assigned reviews!</p>
     {% endif %}
 {% endblock %}
 
@@ -138,7 +138,7 @@
 
             dialog = $("#review-upload-form").dialog({
                 autoOpen: false,
-                height: 160,
+                height: 175,
                 width: 350,
                 modal: true,
                 resizable: false
