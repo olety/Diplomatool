@@ -40,41 +40,47 @@
 {% block jumbo %}
     <h1>Topics</h1>
     <div class="spacer">
-    {% if user.has_proposed_topic and not user.is_admin %}
-        <p>You have already proposed a topic</p>
-    {% else %}
-        <p>Can't find the perfect one for you? <a class="btn btn-default" href="#" role="button" id="add-topic">Propose
-        new</a></p>
-    {% endif %}
+        {% if user.has_proposed_topic and not user.is_admin %}
+            <p>You have already proposed a topic</p>
+        {% else %}
+            <p>Can't find the perfect one for you? <a class="btn btn-default" href="#" role="button" id="add-topic">Propose
+                new</a></p>
+        {% endif %}
     </div>
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <table class="table table-hover table-bordered">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Topic</th>
-                    <th>Supervisor</th>
-                    <th>Description</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% if topic_list %}
-                    {% for topic in topic_list %}
+
+    {% if topic_list %}
+        <div id="topics">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <table class="table table-hover table-bordered">
+                        <thead>
                         <tr>
-                            <td>{{ topic.id }}</td>
-                            <td>{{ topic.name }}</td>
-                            <td>{{ topic.supervisor.first_name }} {{ topic.supervisor.last_name }}</td>
-                            <td>{{ topic.short_description }}</td>
-                            <td><input class="btn btn-default" type="button" value="Choose"></td>
+                            <th class="sort" data-sort="topic-id">Topic ID</th>
+                            <th class="sort" data-sort="topic-name">Topic</th>
+                            <th class="sort" data-sort="supervisor-name">Supervisor</th>
+                            <th class="sort" data-sort="description">Description</th>
+                            <th>Action</th>
                         </tr>
-                    {% endfor %}
-                {% endif %}
-                </tbody>
-            </table>
+                        </thead>
+                        <tbody class="list">
+                        {% for topic in topic_list %}
+                            <tr>
+                                <td class="topic-id">{{ topic.id }}</td>
+                                <td class="topic-name">{{ topic.name }}</td>
+                                <td class="supervisor-name">{{ topic.supervisor.first_name }} {{ topic.supervisor.last_name }}</td>
+                                <td class="description">{{ topic.short_description }}</td>
+                                <td class="action"><input class="btn btn-default" type="button" value="Choose"></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-    </div>
+    {% else %}
+        <p>Unfortunately, no topics are available right now :(</p>
+    {% endif %}
+
 
     <div class="col-m-6" id="topic-form" title="Propose a topic">
         {% crispy form form.helper %}
@@ -85,6 +91,10 @@
 
 {% block custom_js %}
     <script>
+        var listOptions = {
+            valueNames: ['topic-id', 'topic-name', 'supervisor-name', 'description']
+        };
+        var topicList = new List('topics', options);
         $(document).ready(function () {
             var dialog;
             var topicButton = $('#add-topic');

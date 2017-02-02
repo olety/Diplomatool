@@ -1,4 +1,4 @@
-from crispy_forms.layout import Layout, Fieldset, Submit, ButtonHolder, Field, Button
+from crispy_forms.layout import Layout, Fieldset, Submit, ButtonHolder, Field, Hidden, Div, Button
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField, AuthenticationForm
 from site_app.models import User, Faculty, Topic, Thesis, Review, Defense
@@ -133,4 +133,12 @@ class LoginForm(AuthenticationForm):
 
 
 class ReviewUploadForm(forms.Form):
-    pass
+    review_file = forms.FileField()
+
+    def __init__(self, *args, **kwargs):
+        super(ReviewUploadForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper['review_file'].label = 'Upload a review'
+        self.helper.add_input(Hidden('review_hidden_id', 'Review'))
+        self.helper.add_input(Submit('submit', 'Upload review', css_class='btn btn-primary btn-lg btn-block'))
+        self.helper.render_hidden_fields = True

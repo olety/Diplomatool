@@ -64,32 +64,18 @@ class ReviewListView(ListView):
     template_name = "reviewer/review_list.html"
     model = models.Review
     context_object_name = 'review_list'
-    show_completed = True
 
     def get_queryset(self):
-        if self.show_completed:
-            return models.Review.objects.filter(author=self.request.user)
-        else:
-            return models.Review.objects.filter(author=self.request.user, finished=False)
+        return models.Review.objects.filter(author=self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['form'] = forms.ReviewUploadForm
+        print(context)
         context['show_completed'] = self.show_completed
 
         return context
 
     def post(self, request):
-        self.show_completed = True if request.POST['show_completed'] == 'True' else False
-        self.object_list = self.get_queryset()
-        allow_empty = self.get_allow_empty()
-        if not allow_empty:
-            if self.get_paginate_by(self.object_list) is not None and hasattr(self.object_list, 'exists'):
-                is_empty = not self.object_list.exists()
-            else:
-                is_empty = len(self.object_list) == 0
-            if is_empty:
-                raise Http404('Empty list and \'%(class_name)s.allow_empty\' is False.' % {
-                    'class_name': self.__class__.__name__,
-                })
         context = self.get_context_data()
         return self.render_to_response(context)

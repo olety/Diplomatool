@@ -1,8 +1,11 @@
 {% extends 'generic/header.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block title %}
     Diplomatool - Reviews
 {% endblock %}
+
 
 {% block custom_css %}
     .table td {
@@ -32,11 +35,12 @@
     th.sort.desc:before {
     content:"\e094";
     }
+
+
 {% endblock %}
 
 {% block jumbo %}
     <h1>Reviews</h1>
-    <div class="spacer"></div>
     <div class="panel panel-default">
         <div class="panel-body">
             <div id="reviews">
@@ -74,21 +78,10 @@
                                         {{ review.deadline }}
                                     </td>
                                     <td class="action">
-                                        <div class="dropdown">
-                                            <button class="btn btn-default dropdown-toggle" type="button"
-                                                    id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
-                                                    aria-expanded="true">
-                                                Dropdown
-                                                <span class="caret"></span>
-                                            </button>
-                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                                <li><a href="#">Action</a></li>
-                                                <li><a href="#">Another action</a></li>
-                                                <li><a href="#">Something else here</a></li>
-                                                <li role="separator" class="divider"></li>
-                                                <li><a href="#">Separated link</a></li>
-                                            </ul>
-                                        </div>
+                                        <button type="button" class="btn btn-default">Download thesis</button>
+                                        <button type="button" class="btn btn-default upload-review"
+                                                id="{{ review.id }}">Upload review
+                                        </button>
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -99,6 +92,14 @@
                     </div>
                     </div>
                 {% endif %}
+
+
+    <div class="col-m-6" id="review-upload-form" title="Propose a topic">
+        {% crispy form form.helper %}
+    </div>
+
+
+
 {% endblock %}
 
 
@@ -107,6 +108,34 @@
         var options = {
             valueNames: ['student-id', 'student-name', 'topic-name', 'review-finished', 'deadline', 'action']
         };
+
         var reviewList = new List('reviews', options);
+
+        var dialog;
+        var topicButton = $('[class$="upload-review"]');
+        var cancelButton = $('#cancel-review-form');
+        var review_hidden_input = $('[name="review_hidden_id"]');
+
+        dialog = $("#review-upload-form").dialog({
+            autoOpen: false,
+            height: 160,
+            width: 350,
+            modal: true,
+            resizable: false
+        });
+
+        topicButton.on('click', function (event) {
+            review_hidden_input.val($(this).attr('id'));
+            dialog.dialog('open');
+            event.preventDefault();
+        });
+
+        cancelButton.on('click', function (event) {
+            dialog.dialog('close');
+            event.preventDefault();
+        });
+
+    </script>
+    <script>
     </script>
 {% endblock %}
