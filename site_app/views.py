@@ -5,6 +5,8 @@ from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 from django.views.generic import TemplateView
 from functools import wraps
+
+from site_app.forms import ReviewUploadForm
 from . import models
 from . import forms
 
@@ -64,6 +66,8 @@ class ReviewListView(ListView):
     template_name = "reviewer/review_list.html"
     model = models.Review
     context_object_name = 'review_list'
+    did_send = False
+    object_list = None
 
     def get_queryset(self):
         return models.Review.objects.filter(author=self.request.user)
@@ -71,11 +75,17 @@ class ReviewListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = forms.ReviewUploadForm
-        print(context)
-        context['show_completed'] = self.show_completed
-
         return context
 
     def post(self, request):
+        form = ReviewUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            review = models.Review.objects.get(id=request.POST.get('review_hidden_id'))
+            review.file = form.review_file
+            review.save()
+
+        print(request.POST.get('review_file'))
+        self.object_list = self.get_queryset()
         context = self.get_context_data()
+        context['sent_review'] = True
         return self.render_to_response(context)

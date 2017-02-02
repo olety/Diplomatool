@@ -10,10 +10,16 @@
 {% block custom_css %}
     .table td {
     text-align: center;
+    vertical-align:middle;
     }
 
     .table th {
     text-align: center;
+    }
+
+    .im-centered {
+    margin: auto;
+    max-width: 300px;
     }
 
     .spacer {
@@ -22,7 +28,7 @@
     height:50px;
     }
 
-    th.sort:before{
+    th.sort:before {
     content:"\e150";
     font-family:"Glyphicons Halflings";
     padding-right: 14px;
@@ -36,17 +42,24 @@
     content:"\e094";
     }
 
-
 {% endblock %}
 
-{% block jumbo %}
+{% block container %}
     <h1>Reviews</h1>
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div id="reviews">
-                {% if review_list %}
+    {% if sent_review %}
+        <div class="alert alert-success alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                    aria-hidden="true">&times;</span></button>
+            <strong>Review upload complete!</strong>
+        </div>
+    {% endif %}
+
+    {% if review_list %}
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div id="reviews">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover">
+                        <table class="table table-bordered table-hover" id="cssTable">
                             <tr>
                                 <th class="sort" data-sort="student-id">Student ID</th>
                                 <th class="sort" data-sort="student-name">Student Name</th>
@@ -69,37 +82,44 @@
                                     </td>
                                     <td class="review-finished">
                                         {% if review.finished %}
-                                            True
+                                            Reviewed
                                         {% else %}
-                                            False
+                                            Not reviewed
                                         {% endif %}
                                     </td>
                                     <td class="deadline">
                                         {{ review.deadline }}
                                     </td>
                                     <td class="action">
-                                        <button type="button" class="btn btn-default">Download thesis</button>
-                                        <button type="button" class="btn btn-default upload-review"
-                                                id="{{ review.id }}">Upload review
-                                        </button>
+                                        {% if not review.finished %}
+                                            <button type="button" class="btn btn-block btn-default">Download thesis
+                                            </button>
+                                            <button type="button" class="btn  btn-block btn-default upload-review"
+                                                    id="{{ review.id }}">Upload review
+                                            </button>
+                                        {% else %}
+                                            <button type="button" class="btn btn-block btn-default">Download thesis
+                                            </button>
+                                        {% endif %}
                                     </td>
                                 </tr>
                             {% endfor %}
                             </tbody>
                         </table>
                     </div>
-                    </div>
-                    </div>
-                    </div>
-                {% endif %}
+                </div>
+            </div>
+
+        </div>
 
 
-    <div class="col-m-6" id="review-upload-form" title="Propose a topic">
-        {% crispy form form.helper %}
-    </div>
+        <div class="col-m-6" id="review-upload-form" title="Upload a review">
+            {% crispy form form.helper %}
+        </div>
 
-
-
+    {% else %}
+        <p>You have no pending reviews!</p>
+    {% endif %}
 {% endblock %}
 
 
@@ -110,31 +130,31 @@
         };
 
         var reviewList = new List('reviews', listOptions);
+        $(document).ready(function () {
+            var dialog;
+            var topicButton = $('[class$="upload-review"]');
+            var cancelButton = $('#cancel-review-form');
+            var review_hidden_input = $('[name="review_hidden_id"]');
 
-        var dialog;
-        var topicButton = $('[class$="upload-review"]');
-        var cancelButton = $('#cancel-review-form');
-        var review_hidden_input = $('[name="review_hidden_id"]');
+            dialog = $("#review-upload-form").dialog({
+                autoOpen: false,
+                height: 160,
+                width: 350,
+                modal: true,
+                resizable: false
+            });
 
-        dialog = $("#review-upload-form").dialog({
-            autoOpen: false,
-            height: 160,
-            width: 350,
-            modal: true,
-            resizable: false
+            topicButton.on('click', function (event) {
+                review_hidden_input.val($(this).attr('id'));
+                dialog.dialog('open');
+                event.preventDefault();
+            });
+
+            cancelButton.on('click', function (event) {
+                dialog.dialog('close');
+                event.preventDefault();
+            });
         });
-
-        topicButton.on('click', function (event) {
-            review_hidden_input.val($(this).attr('id'));
-            dialog.dialog('open');
-            event.preventDefault();
-        });
-
-        cancelButton.on('click', function (event) {
-            dialog.dialog('close');
-            event.preventDefault();
-        });
-
     </script>
     <script>
     </script>

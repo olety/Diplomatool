@@ -233,8 +233,9 @@ class Thesis(models.Model):
         :return: String representation of Thesis
         :rtype: string
         '''
-        return self.get_thesis_name()
+        return self.get_thesis_name
 
+    @property
     def get_thesis_name(self):
         '''
         Gets a formatted review name for string representation of Thesis.
@@ -301,7 +302,7 @@ class Review(models.Model):
         :return: Review ID, author and the name of thesis under review
         :rtype: string
         '''
-        review_name = 'Review #{} by {} of {}'.format(self.id, self.author, self.thesis.get_thesis_name())
+        review_name = 'Review #{} by {} of {}'.format(self.id, self.author, self.thesis.get_thesis_name)
         return review_name.strip()
 
 
@@ -335,5 +336,5 @@ class Defense(models.Model):
         :return: Defense ID and name of defended thesis
         :rtype: string
         '''
-        defense_name = 'Defense #{} of {}'.format(self.id, self.thesis.get_thesis_name())
+        defense_name = 'Defense #{} of {}'.format(self.id, self.thesis.get_thesis_name)
         return defense_name.strip()
