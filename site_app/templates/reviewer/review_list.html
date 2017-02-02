@@ -105,11 +105,11 @@
 
 {% block custom_js %}
     <script>
-        var options = {
+        var listOptions = {
             valueNames: ['student-id', 'student-name', 'topic-name', 'review-finished', 'deadline', 'action']
         };
 
-        var reviewList = new List('reviews', options);
+        var reviewList = new List('reviews', listOptions);
 
         var dialog;
         var topicButton = $('[class$="upload-review"]');
