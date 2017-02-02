@@ -32,43 +32,43 @@ class ProfileView(TemplateView):
 @method_decorator(login_required, name='dispatch')
 @method_decorator(check_group('Student'), name='dispatch')
 class TopicListView(ListView):
-    '''
+    """
     View class responsible for displaying review list. Presents the Topic model.
-    '''
+    """
 
     template_name = "student/topic_list.html"
     model = models.Topic
     context_object_name = 'topic_list'
 
     def get_queryset(self):
-        '''
+        """
         Gets the queryset of a Topic model presented by this view
 
         :return: List of available topics
         :rtype: QuerySet
-        '''
+        """
         return models.Topic.objects.filter(available=True)
 
     def get_context_data(self, **kwargs):
-        '''
+        """
         Gets context data of the topic list view to pass to the template.
 
         :param kwargs: Keyword arguments
         :return: The context of the topic list view
         :rtype: MultipleObjectMixin
-        '''
+        """
         context = super(TopicListView, self).get_context_data()
         context['form'] = forms.StudentTopicProposalForm()
         return context
 
     def post(self, request):
-        '''
+        """
         Handler the post request of sending the propose topic form
 
         :param request: (HttpRequest) The request performed by user
         :return: The response containing content of the topic list page
         :rtype TemplateResponse
-        '''
+        """
         topic = models.Topic()
         topic.name = request.POST.get('name')
         topic.short_description = request.POST.get('description')
@@ -88,10 +88,10 @@ class TopicListView(ListView):
 @method_decorator(login_required, name='dispatch')
 @method_decorator(check_group('Reviewer'), name='dispatch')
 class ReviewListView(ListView):
-    '''
+    """
     View class responsible for displaying review list. Presents the Review model. Only reviewers and administrators will be able to access this
     view.
-    '''
+    """
     template_name = "reviewer/review_list.html"
     model = models.Review
     context_object_name = 'review_list'
@@ -99,34 +99,34 @@ class ReviewListView(ListView):
     object_list = None
 
     def get_queryset(self):
-        '''
+        """
         Gets the queryset of a Review model presented by this view
 
         :return: List of reviews made by current user
         :rtype: QuerySet
-        '''
+        """
         return models.Review.objects.filter(author=self.request.user)
 
     def get_context_data(self, **kwargs):
-        '''
+        """
         Gets context data of the review list view to pass to the template.
 
         :param kwargs: Keyword arguments
         :return: The context of the review list view
         :rtype: MultipleObjectMixin
-        '''
+        """
         context = super().get_context_data(**kwargs)
         context['form'] = forms.ReviewUploadForm
         return context
 
     def post(self, request):
-        '''
+        """
         Handles the post request of sending the review file form
 
         :param request: (HttpRequest) The request performed by user
         :return: The response containing content of the review list page
         :rtype TemplateResponse
-        '''
+        """
 
         form = ReviewUploadForm(request.POST, request.FILES)
         if form.is_valid():
