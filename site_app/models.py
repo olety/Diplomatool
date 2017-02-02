@@ -207,7 +207,7 @@ class Thesis(models.Model):
         '''
         Function used to retrieve the file path for specific thesis file.
 
-        :param filename: Name of the thesis file
+        :param filename: (string) Name of the thesis file
         :return: The full path of the requested thesis file
         :rtype: string
         '''
@@ -277,7 +277,7 @@ class Review(models.Model):
         '''
         Function used to retrieve the file path for specific review file.
 
-        :param filename: Name of the review file
+        :param filename: (string) Name of the review file
         :return: The full path of the requested review file
         :rtype: string
         '''
@@ -293,7 +293,7 @@ class Review(models.Model):
         :return: String representation of Review
         :rtype: string
         '''
-        return self.get_review_name()
+        return self.get_review_name
 
     def get_review_name(self):
         '''
@@ -327,7 +327,7 @@ class Defense(models.Model):
         :return: String representation of Defense
         :rtype: string
         '''
-        return self.get_defense_name()
+        return self.get_defense_name
 
     def get_defense_name(self):
         '''
