@@ -31,31 +31,32 @@ class TopicChangeForm(forms.ModelForm):
 
 
 class UserCreationForm(forms.ModelForm):
-    '''A form for creating new users. Includes all the required
+    """A form for creating new users. Includes all the required
     fields, plus a repeated password. Attributes:
-        password1, password2
+    password1, password2
     Class contains useful methods for the password processing:
-        clean_password2(), save(commit)
-    '''
+    clean_password2(), save(commit)
+    """
+
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
 
     class Meta:
-        '''
+        """
         Meta class describes which (if any) this form represents. It is used by internal Django functions.
-        '''
+        """
         model = User
         fields = ('email', 'first_name', 'last_name', 'index_number')
 
     def clean_password2(self):
         # Check that the two passwords match
-        '''
+        """
         Checks if two given passwords match each other.
 
         :raises: ValidationError
         :return: Correct password
         :rtype: string
-        '''
+        """
         password1 = self.cleaned_data.get('password1')
         password2 = self.cleaned_data.get('password2')
         if password1 and password2 and password1 != password2:
@@ -63,13 +64,14 @@ class UserCreationForm(forms.ModelForm):
         return password2
 
     def save(self, commit=True):
-        '''
+        """
         Saves the passwords from the form
 
         :param commit: (bool) If True then the password is saved in database, if False it is only saved in form
         :return: User for which the passwords were given
         :rtype User
-        '''
+        """
+
         # Save the provided password
         user = super(UserCreationForm, self).save(commit=False)
         user.set_password(self.cleaned_data['password1'])
@@ -154,17 +156,17 @@ class LoginForm(AuthenticationForm):
 
 
 class ReviewUploadForm(forms.Form):
-    '''
+    """
     Form for uploading files containing review of the thesis. Consists of attributes:
         review_file
-    '''
+    """
     review_file = forms.FileField()
 
     def __init__(self, *args, **kwargs):
-        '''
+        """
         Constructor for the review file form. Arguments *args and **kwargs are not used but are required for correct
         implementation of this function.
-        '''
+        """
         super(ReviewUploadForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.helper['review_file'].label = 'Upload a review'

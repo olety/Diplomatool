@@ -61,10 +61,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     """
     User class represents the User table in the database. It implements functionalities required by Django and contains
     following attributes:
-        index_number, first_name, last_name, degree, email, department, faculty, is_admin
+    index_number, first_name, last_name, degree, email, department, faculty, is_admin
     which can be used to access database regardless of the language it uses
     Methods:
-        is_staff(), has_proposed_topic(), __str__(), is_superuser(), is_reviewer(), is_student()
+    is_staff(), has_proposed_topic(), __str__(), is_superuser(), is_reviewer(), is_student()
     """
     index_number = models.CharField('index number', max_length=10, default='000001')
     first_name = models.CharField('first name', max_length=255,
@@ -180,11 +180,12 @@ class Topic(models.Model):
 class Thesis(models.Model):
     """
     Thesis class represents the Thesis table in the database. It contains following attributes:
-        supervisor, student, topic, finished, finished_date, file
+    supervisor, student, topic, finished, finished_date, file
     which can be used to access database regardless of the language it uses
     Methods:
-        get_file_path(filename), reviewed(), __str__(), get_thesis_name()
+    get_file_path(filename), reviewed(), __str__(), get_thesis_name()
     """
+
     class Meta:
         """
         Meta class required by administration tools of Django
@@ -250,15 +251,16 @@ class Thesis(models.Model):
 class Review(models.Model):
     """
     Review class represents the Review table in the database. It contains following attributes:
-        author, thesis, finished, finished_date
+    author, thesis, finished, finished_date
     which can be used to access database regardless of the language it uses
     Methods:
-        deadline(), get_file_path(filename), __str__(), get_review_name()
+    deadline(), get_file_path(filename), __str__(), get_review_name()
     """
     author = models.ForeignKey(User, on_delete=models.CASCADE,
                                verbose_name='review author', related_name='review_author')
     thesis = models.ForeignKey(Thesis, on_delete=models.CASCADE,
                                verbose_name='reviewed thesis', related_name='reviewed_thesis')
+
     # We can reference a topic via thesis
     @property
     def finished(self):
@@ -317,10 +319,10 @@ class Review(models.Model):
 class Defense(models.Model):
     """
     Defense class represents the Defense table in the database. It contains following attributes:
-        thesis, date, successful, second_defense
+    thesis, date, successful, second_defense
     which can be used to access database regardless of the language it uses
     Methods:
-        __str__, get_defense_name()
+    __str__, get_defense_name()
     """
     thesis = models.ForeignKey(Thesis, on_delete=models.CASCADE,
                                verbose_name='defended thesis', related_name='defended_thesis')
