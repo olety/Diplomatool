@@ -1,7 +1,7 @@
 {% extends 'generic/header.html' %}
 
 {% block title %}
-    Dimplomatool - Reviews
+    Diplomatool - Reviews
 {% endblock %}
 
 {% block custom_css %}
@@ -36,55 +36,69 @@
 
 {% block jumbo %}
     <h1>Reviews</h1>
-    <div id="reviews">
-        <input class="search" placeholder="Search"/>
-        <button class="sort" data-sort="review-finished">
-            Sort by compl
-        </button>
-        <div class="spacer"></div>
-        {% if review_list %}
-            <div class="table-responsive">
-                <table class="table table- table-hover">
-                    <tr>
-                        <th class="sort" data-sort="student-id">Student ID</th>
-                        <th class="sort" data-sort="student-name">Student Name</th>
-                        <th class="sort" data-sort="topic-name">Topic</th>
-                        <th class="sort" data-sort="review-finished">Review status</th>
-                        <th class="sort" data-sort="deadline">Deadline</th>
-                        <th>Action</th>
-                    </tr>
-                    <tbody class="list">
-                    {% for review in review_list %}
-                        <tr>
-                            <td class="student-id">
-                                {{ review.thesis.student.index_number }}
-                            </td>
-                            <td class="student-name">
-                                {{ review.thesis.student.get_full_name }}
-                            </td>
-                            <td class="topic-name">
-                                {{ review.thesis.topic.name }}
-                            </td>
-                            <td class="review-finished">
-                                {% if review.finished %}
-                                    True
-                                {% else %}
-                                    False
-                                {% endif %}
-                            </td>
-                            <td class="deadline">
-                                {{ review.deadline }}
-                            </td>
-                            <td class="action">
-                                <button class="btn"></button>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            </div>
-        {% endif %}
+    <div class="spacer"></div>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div id="reviews">
+                {% if review_list %}
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <tr>
+                                <th class="sort" data-sort="student-id">Student ID</th>
+                                <th class="sort" data-sort="student-name">Student Name</th>
+                                <th class="sort" data-sort="topic-name">Topic</th>
+                                <th class="sort" data-sort="review-finished">Review status</th>
+                                <th class="sort" data-sort="deadline">Deadline</th>
+                                <th>Action</th>
+                            </tr>
+                            <tbody class="list">
+                            {% for review in review_list %}
+                                <tr>
+                                    <td class="student-id">
+                                        {{ review.thesis.student.index_number }}
+                                    </td>
+                                    <td class="student-name">
+                                        {{ review.thesis.student.get_full_name }}
+                                    </td>
+                                    <td class="topic-name">
+                                        {{ review.thesis.topic.name }}
+                                    </td>
+                                    <td class="review-finished">
+                                        {% if review.finished %}
+                                            True
+                                        {% else %}
+                                            False
+                                        {% endif %}
+                                    </td>
+                                    <td class="deadline">
+                                        {{ review.deadline }}
+                                    </td>
+                                    <td class="action">
+                                        <div class="dropdown">
+                                            <button class="btn btn-default dropdown-toggle" type="button"
+                                                    id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
+                                                    aria-expanded="true">
+                                                Dropdown
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                                <li><a href="#">Action</a></li>
+                                                <li><a href="#">Another action</a></li>
+                                                <li><a href="#">Something else here</a></li>
+                                                <li role="separator" class="divider"></li>
+                                                <li><a href="#">Separated link</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    </div>
+                    </div>
+                    </div>
+                {% endif %}
 {% endblock %}
 
 
@@ -93,7 +107,6 @@
         var options = {
             valueNames: ['student-id', 'student-name', 'topic-name', 'review-finished', 'deadline', 'action']
         };
-
         var reviewList = new List('reviews', options);
     </script>
 {% endblock %}

@@ -1,6 +1,7 @@
 from django import forms
-from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.contrib.auth.forms import ReadOnlyPasswordHashField, AuthenticationForm
 from site_app.models import User, Faculty, Topic, Thesis, Review, Defense
+from crispy_forms.helper import FormHelper
 
 
 class FacultyCreationForm(forms.ModelForm):
@@ -102,6 +103,17 @@ class DefenseChangeForm(forms.ModelForm):
     class Meta:
         model = Defense
         fields = ('thesis', 'date', 'successful', 'second_defense')
+
+
+class StudentTopicProposalForm(forms.Form):
+    name = forms.CharField(max_length=100)
+
+
+class LoginForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super(LoginForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+
 
 
 class ReviewUploadForm(forms.Form):

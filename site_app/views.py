@@ -16,9 +16,7 @@ def check_group(group_name):
             if request.user.groups.filter(name=group_name).exists() or request.user.is_admin:
                 return view_func(request, *args, **kwargs)
             return redirect('/')
-
         return wrapper
-
     return _check_group
 
 
