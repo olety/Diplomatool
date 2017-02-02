@@ -6,6 +6,8 @@ from django.db import models
 from model_utils import Choices
 from datetime import timedelta
 
+LEVELS = Choices('Bachelor', 'Master', 'Doctor')
+
 
 class Faculty(models.Model):
     class Meta:
@@ -61,7 +63,7 @@ class User(AbstractBaseUser, PermissionsMixin):
                                   null=True, blank=True, default='Name')
     last_name = models.CharField('last name', max_length=255,
                                  null=True, blank=True, default='Surname')
-    degree = models.CharField('degree', max_length=50, null=True, blank=True, default='Degree')
+    degree = models.CharField('degree', max_length=50, null=True, blank=True, choices=LEVELS, default=LEVELS.Bachelor)
     email = models.EmailField('email address', blank=False, unique=True)
     department = models.CharField('user department', max_length=4, null=True, blank=True)
     faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE, null=True,
@@ -72,6 +74,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def is_staff(self):
         return self.is_admin
+
+    @property
+    def has_proposed_topic(self):
+        return True if Topic.objects.filter(student_id=self.id) else False
 
     @property
     def is_superuser(self):
@@ -111,16 +117,15 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Topic(models.Model):
 
-    LEVELS = Choices('Bachelor', 'Master', 'Doctor')
     student = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='topic owner',
                                 related_name='topic_owner', null=True, blank=True)
     supervisor = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='topic supervisor',
                                    related_name='topic_supervisor', null=True, blank=True)
     name = models.CharField('topic', max_length=255)
     level = models.CharField('level', max_length=255, null=True, blank=True, choices=LEVELS, default=LEVELS.Bachelor)
-    voted_for = models.NullBooleanField('voted for', null=True, blank=True)
-    available = models.NullBooleanField('available', null=True, blank=True)
-    checked = models.NullBooleanField('checked', null=True, blank=True)
+    voted_for = models.NullBooleanField('voted for', null=True, blank=True, default=False)
+    available = models.NullBooleanField('available', null=True, blank=True, default=False)
+    checked = models.NullBooleanField('checked', null=True, blank=True, default=False)
     short_description = models.CharField('short description', max_length=255, null=True, blank=True)
     REQUIRED_FIELDS = ['name', ]
 

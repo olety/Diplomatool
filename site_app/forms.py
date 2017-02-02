@@ -1,8 +1,9 @@
-from crispy_forms.layout import Layout, Fieldset, Submit, ButtonHolder, Field
+from crispy_forms.layout import Layout, Fieldset, Submit, ButtonHolder, Field, Button
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField, AuthenticationForm
 from site_app.models import User, Faculty, Topic, Thesis, Review, Defense
 from crispy_forms.helper import FormHelper
+from . import models
 
 
 class FacultyCreationForm(forms.ModelForm):
@@ -108,6 +109,16 @@ class DefenseChangeForm(forms.ModelForm):
 
 class StudentTopicProposalForm(forms.Form):
     name = forms.CharField(max_length=100)
+    supervisor = forms.ChoiceField(choices=[(supervisor.id, supervisor.__str__()) for supervisor in
+                                            models.User.objects.filter(groups__name='Supervisor')])
+    description = forms.CharField(widget=forms.Textarea)
+
+    def __init__(self, *args, **kwargs):
+        super(StudentTopicProposalForm, self).__init__(*args, *kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_method = 'post'
+        self.helper.add_input(Submit('submit', 'Submit', css_class='btn btn-primary btn-lg btn-block'))
+        self.helper.add_input(Button('cancel', 'Cancel', css_class='btn btn-default btn-lg btn-block'))
 
 
 class LoginForm(AuthenticationForm):

@@ -38,11 +38,20 @@ class TopicListView(ListView):
     def get_context_data(self, **kwargs):
         context = super(TopicListView, self).get_context_data()
         context['supervisors'] = models.User.objects.filter(groups__name='Supervisor')
+        context['form'] = forms.StudentTopicProposalForm()
         return context
 
     def post(self, request):
-        print(request.POST)
-        print(request)
+        topic = models.Topic()
+        topic.name = request.POST.get('name')
+        topic.short_description = request.POST.get('description')
+        supervisor_id = request.POST.get('supervisor')
+        supervisor = models.User.objects.get(pk=supervisor_id)
+        topic.supervisor = supervisor
+        current_user = request.user
+        topic.student = current_user
+        topic.level = current_user.degree
+        topic.save()
 
         self.object_list = self.get_queryset()
         context = self.get_context_data()
@@ -66,6 +75,7 @@ class ReviewListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['show_completed'] = self.show_completed
+
         return context
 
     def post(self, request):

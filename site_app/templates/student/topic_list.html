@@ -1,4 +1,9 @@
 {% extends 'generic/header.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    Diplomatool - Topics
+{% endblock %}
 
 {% block custom_css %}
     .table td {
@@ -35,12 +40,16 @@
 {% block jumbo %}
     <h1>Topics</h1>
     <div class="spacer">
-        Can't find the perfect one for you? <a class="btn btn-default btn-sm" href="#" role="button" id="add-topic">Propose
-        new</a>
+    {% if user.has_proposed_topic and not user.is_admin %}
+        <p>You have already proposed a topic</p>
+    {% else %}
+        <p>Can't find the perfect one for you? <a class="btn btn-default" href="#" role="button" id="add-topic">Propose
+        new</a></p>
+    {% endif %}
     </div>
     <div class="panel panel-default">
         <div class="panel-body">
-            <table class="table table-hover table-responsive">
+            <table class="table table-hover table-bordered">
                 <thead>
                 <tr>
                     <th>ID</th>
@@ -68,32 +77,7 @@
     </div>
 
     <div class="col-m-6" id="topic-form" title="Propose a topic">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <form method="post">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="name" class="control-label">Topic name</label>
-                        <input type="text" class="form-control" id="name" placeholder="Topic name">
-                    </div>
-                    <div class="form-group">
-                        <label for="supervisor" class="control-label">Supervisor</label>
-                        <select class="form-control" id="supervisor">
-                            {% for supervisor in supervisors %}
-                                <option value={{ supervisor.id }}>{{ supervisor.first_name }} {{ supervisor.last_name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="name" class="control-label">Short description</label>
-                        <textarea class="form-control" rows="3"></textarea>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                    <button type="button" class="btn btn-default" id="cancel-topic-form">Cancel</button>
-                </form>
-            </div>
-        </div>
+        {% crispy form form.helper %}
     </div>
 
 {% endblock %}
@@ -104,11 +88,11 @@
         $(document).ready(function () {
             var dialog;
             var topicButton = $('#add-topic');
-            var cancelButton = $('#cancel-topic-form');
+            var cancelButton = $('#button-id-cancel');
 
             dialog = $("#topic-form").dialog({
                 autoOpen: false,
-                height: 420,
+                height: 560,
                 width: 500,
                 modal: true,
             });
@@ -117,12 +101,12 @@
                 topicButton.off("focus");
                 dialog.dialog('open');
                 event.preventDefault();
-            })
+            });
 
             cancelButton.on('click', function (event) {
                 dialog.dialog('close');
                 event.preventDefault();
-            })
+            });
         })
     </script>
 {% endblock %}
