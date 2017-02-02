@@ -17,10 +17,16 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
+import os
+import sys
+import django
+sys.path.insert(0, os.path.abspath('..'))
+os.environ['DJANGO_SETTINGS_MODULE'] = 'Diplomatool.settings'
+django.setup()
 # sys.path.insert(0, os.path.abspath('.'))
 
+# sys.path.insert(0, os.path.abspath('..'))
+# settings.configure()
 
 # -- General configuration ------------------------------------------------
 

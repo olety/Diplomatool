@@ -33,10 +33,11 @@ class TopicChangeForm(forms.ModelForm):
 class UserCreationForm(forms.ModelForm):
     """A form for creating new users. Includes all the required
     fields, plus a repeated password. Attributes:
-        password1, password2
+    password1, password2
     Class contains useful methods for the password processing:
-        clean_password2(), save(commit)
+    clean_password2(), save(commit)
     """
+
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
 
@@ -70,6 +71,7 @@ class UserCreationForm(forms.ModelForm):
         :return: User for which the passwords were given
         :rtype User
         """
+
         # Save the provided password
         user = super(UserCreationForm, self).save(commit=False)
         user.set_password(self.cleaned_data['password1'])

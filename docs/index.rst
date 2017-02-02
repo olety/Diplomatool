@@ -8,9 +8,10 @@ Welcome to Diplomatool's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
-
+   modules/models
+   modules/views
+   modules/forms
 
 Indices and tables
 ==================

@@ -47,6 +47,7 @@ class TopicListView(ListView):
         :return: List of available topics
         :rtype: QuerySet
         """
+
         return models.Topic.objects.filter(available=True)
 
     def get_context_data(self, **kwargs):
@@ -57,6 +58,7 @@ class TopicListView(ListView):
         :return: The context of the topic list view
         :rtype: MultipleObjectMixin
         """
+
         context = super(TopicListView, self).get_context_data()
         context['form'] = forms.StudentTopicProposalForm()
         return context
@@ -68,6 +70,7 @@ class TopicListView(ListView):
         :param request: (HttpRequest) The request performed by user
         :return: The response containing content of the topic list page
         :rtype TemplateResponse
+
         """
         topic = models.Topic()
         topic.name = request.POST.get('name')
@@ -92,6 +95,7 @@ class ReviewListView(ListView):
     View class responsible for displaying review list. Presents the Review model. Only reviewers and administrators will be able to access this
     view.
     """
+
     template_name = "reviewer/review_list.html"
     model = models.Review
     context_object_name = 'review_list'
@@ -105,6 +109,7 @@ class ReviewListView(ListView):
         :return: List of reviews made by current user
         :rtype: QuerySet
         """
+
         return models.Review.objects.filter(author=self.request.user)
 
     def get_context_data(self, **kwargs):
@@ -115,6 +120,7 @@ class ReviewListView(ListView):
         :return: The context of the review list view
         :rtype: MultipleObjectMixin
         """
+
         context = super().get_context_data(**kwargs)
         context['form'] = forms.ReviewUploadForm
         return context
@@ -126,6 +132,7 @@ class ReviewListView(ListView):
         :param request: (HttpRequest) The request performed by user
         :return: The response containing content of the review list page
         :rtype TemplateResponse
+
         """
 
         form = ReviewUploadForm(request.POST, request.FILES)
