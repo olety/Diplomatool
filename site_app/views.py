@@ -6,6 +6,7 @@ from django.views.generic import ListView
 from django.views.generic import TemplateView
 from functools import wraps
 from . import models
+from . import forms
 
 
 def check_group(group_name):
@@ -40,6 +41,14 @@ class TopicListView(ListView):
         context = super(TopicListView, self).get_context_data()
         context['supervisors'] = models.User.objects.filter(groups__name='Supervisor')
         return context
+
+    def post(self, request):
+        print(request.POST)
+        print(request)
+
+        self.object_list = self.get_queryset()
+        context = self.get_context_data()
+        return self.render_to_response(context)
 
 
 @method_decorator(login_required, name='dispatch')

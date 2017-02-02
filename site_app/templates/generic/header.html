@@ -81,14 +81,12 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
 <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <script>
-    $(document).ready(function () {
-        var links = $('[class$="navbar-nav"] li a');
-        links.each(function () {
-            var self = $(this);
-            if (self.attr('href') == window.location.pathname) {
-                self.parent().addClass('active');
-            }
-        })
+    var links = $('[class$="navbar-nav"] li a');
+    links.each(function () {
+        var self = $(this);
+        if (self.attr('href') == window.location.pathname) {
+            self.parent().addClass('active');
+        }
     })
 </script>
 {% block custom_js %}

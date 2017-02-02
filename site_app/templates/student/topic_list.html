@@ -70,7 +70,8 @@
     <div class="col-m-6" id="topic-form" title="Propose a topic">
         <div class="panel panel-default">
             <div class="panel-body">
-                <form action="" method="post">
+                <form method="post">
+                    {% csrf_token %}
                     <div class="form-group">
                         <label for="name" class="control-label">Topic name</label>
                         <input type="text" class="form-control" id="name" placeholder="Topic name">
@@ -112,12 +113,15 @@
                 modal: true,
             });
 
-            topicButton.on('click', function () {
+            topicButton.on('click', function (event) {
+                topicButton.off("focus");
                 dialog.dialog('open');
+                event.preventDefault();
             })
 
-            cancelButton.on('click', function () {
+            cancelButton.on('click', function (event) {
                 dialog.dialog('close');
+                event.preventDefault();
             })
         })
     </script>
