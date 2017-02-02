@@ -73,6 +73,7 @@ class TopicListView(ListView):
 
         """
         topic = models.Topic()
+        print(request.POST)
         topic.name = request.POST.get('name')
         topic.short_description = request.POST.get('description')
         supervisor_id = request.POST.get('supervisor')
@@ -142,7 +143,6 @@ class ReviewListView(ListView):
             review.finished_date = timezone.now()
             review.save()
 
-        print(review)
         self.object_list = self.get_queryset()
         context = self.get_context_data()
         context['sent_review'] = True
