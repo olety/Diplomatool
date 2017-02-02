@@ -52,8 +52,7 @@
                 <div class="spacer"></div>
                 <form method="post">
                     {% csrf_token %}
-                    {{ form|crispy }}
-                    <button type="submit" class="btn btn-primary btn-block">Login</button>
+                    {% crispy form form.helper %}
                 </form>
             </div>
         </div>

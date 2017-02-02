@@ -1,3 +1,4 @@
+from crispy_forms.layout import Layout, Fieldset, Submit, ButtonHolder
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField, AuthenticationForm
 from site_app.models import User, Faculty, Topic, Thesis, Review, Defense
@@ -113,7 +114,7 @@ class LoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
-
+        self.helper.add_input(Submit('submit', 'Login'))
 
 
 class ReviewUploadForm(forms.Form):
