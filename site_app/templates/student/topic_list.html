@@ -37,16 +37,14 @@
     #topic-form { display: none; }
 {% endblock %}
 
-{% block jumbo %}
+{% block container %}
     <h1>Topics</h1>
-    <div class="spacer">
-        {% if user.has_proposed_topic and not user.is_admin %}
-            <p>You have already proposed a topic</p>
-        {% else %}
-            <p>Can't find the perfect one for you? <a class="btn btn-default" href="#" role="button" id="add-topic">Propose
-                new</a></p>
-        {% endif %}
-    </div>
+    {% if user.has_proposed_topic and not user.is_admin %}
+        <p>You have already proposed a topic</p>
+    {% else %}
+        <p>Can't find the perfect one for you? <a class="btn btn-default" href="#" role="button" id="add-topic">Propose
+            new</a></p>
+    {% endif %}
 
     {% if topic_list %}
         <div id="topics">
@@ -105,6 +103,7 @@
                 height: 560,
                 width: 500,
                 modal: true,
+                resizable: false
             });
 
             topicButton.on('click', function (event) {
