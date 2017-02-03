@@ -17,10 +17,6 @@ setup(name='ssd-project',
           'requests',
           'six',
           'stevedore',
-          'tabulate',
-          'virtualenv',
-          'virtualenv-clone',
-          'virtualenvwrapper',
           'wheel'
       ],
       )
