@@ -73,11 +73,10 @@ class TopicListView(ListView):
 
         """
         topic = models.Topic()
-        print(request.POST)
         topic.name = request.POST.get('name')
         topic.short_description = request.POST.get('description')
         supervisor_id = request.POST.get('supervisor')
-        supervisor = models.User.objects.get(pk=supervisor_id)
+        supervisor = models.User.objects.get(id=supervisor_id)
         topic.supervisor = supervisor
         current_user = request.user
         topic.student = current_user
@@ -135,15 +134,20 @@ class ReviewListView(ListView):
         :rtype TemplateResponse
 
         """
-
-        form = ReviewUploadForm(request.POST, request.FILES)
+        fail = False
+        form = ReviewUploadForm(data=request.POST or None, files=request.FILES or None)
         if form.is_valid():
             review = models.Review.objects.get(id=request.POST.get('review_hidden_id'))
             review.file = form.cleaned_data.get('review_file')
             review.finished_date = timezone.now()
             review.save()
+            fail = False
+        else:
+            fail = True
 
         self.object_list = self.get_queryset()
         context = self.get_context_data()
-        context['sent_review'] = True
+        context['sent_review'] = not fail
+        context['fail'] = fail
+        context['errors'] = form.errors
         return self.render_to_response(context)

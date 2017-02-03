@@ -1,3 +1,6 @@
+import os
+
+from django.conf import settings
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin, Group
 from django.core.mail import send_mail
@@ -292,7 +295,7 @@ class Review(models.Model):
         :rtype: string
         """
         file_ext = filename.split('.')[-1]
-        return 'theses/thesis_{0}/review.{1}'.format(self.thesis.id, file_ext)
+        return os.path.join(settings.MEDIA_ROOT, 'theses/thesis_{0}/review.{1}'.format(self.thesis.id, file_ext))
 
     file = models.FileField(upload_to=get_file_path, verbose_name='review file', null=True, blank=True)
 
@@ -303,7 +306,7 @@ class Review(models.Model):
         :return: String representation of Review
         :rtype: string
         """
-        return self.get_review_name
+        return self.get_review_name()
 
     def get_review_name(self):
         """

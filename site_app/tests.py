@@ -1,6 +1,11 @@
+import os
+from django.conf import settings
 from django.test import TestCase, Client
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
-import unittest.mock
+from django.utils import timezone
+import shutil
+import ntpath
 from . import models
 
 
@@ -74,30 +79,88 @@ class StudentTopicTestCase(TestCase):
     def setUp(self):
         supervisors = models.Group.objects.create(name='Supervisor')
         students = models.Group.objects.create(name='Student')
-        stud = models.User.objects.create_user(email=self.mock_data['stud_email'],
-                                               password=self.mock_data['stud_password'])
-        supervisor = models.User.objects.create_user(email=self.mock_data['super_email'],
-                                                     password=self.mock_data['super_password'])
-        supervisors.user_set.add(supervisor)
-        students.user_set.add(stud)
-        self.stud = stud
-        self.supervisor = supervisor
+        self.stud = models.User.objects.create_user(email=self.mock_data['stud_email'],
+                                                    password=self.mock_data['stud_password'])
+        self.supervisor = models.User.objects.create_user(email=self.mock_data['super_email'],
+                                                          password=self.mock_data['super_password'])
+        supervisors.user_set.add(self.supervisor)
+        students.user_set.add(self.stud)
         self.client = Client()
 
     def test_student_can_propose_topic(self):
-        self.client.login(username=self.stud.email, password=self.stud.password)
-        self.client.post(reverse('topic_list'),
-                         {
-                             'name': self.mock_data['topic_name'],
-                             'description': self.mock_data['topic_desc'],
-                             'supervisor': self.supervisor.id
-                         })
-        print(models.Topic.objects.all())
-        print(self.supervisor.id)
-        proposed_topic = models.Topic.objects.filter(student__id=self.stud.id)
-        print(proposed_topic)
+        self.client.login(username=self.stud.email, password=self.mock_data['stud_password'])
+        self.client.post(reverse('topic_list'), {
+            'name': self.mock_data['topic_name'],
+            'description': self.mock_data['topic_desc'],
+            'supervisor': self.supervisor.id
+        })
+        try:
+            proposed_topic = models.Topic.objects.filter(student__id=self.stud.id)[0]
+        except IndexError:
+            self.fail('Topic was not created')
         self.assertTrue(proposed_topic is not None)
         self.assertEqual(proposed_topic.name, self.mock_data['topic_name'])
         self.assertEqual(proposed_topic.short_description, self.mock_data['topic_desc'])
         self.assertEqual(proposed_topic.supervisor, self.supervisor)
         self.assertEqual(proposed_topic.student, self.stud)
+
+
+class SendReviewTestCase(TestCase):
+    mock_data = {
+        'rev_email': 'reviewer@test.test',
+        'rev_password': 'testpass123',
+        'stud_email': 'student@test.test',
+        'stud_password': 'testpass123',
+        'super_email': 'supervisor@test.test',
+        'super_password': 'testpass123',
+        'topic_name': 'Topic test name',
+        'topic_desc': 'Short description'
+    }
+
+    def setUp(self):
+        # Creating user groups
+        supervisors = models.Group.objects.create(name='Supervisor')
+        students = models.Group.objects.create(name='Student')
+        reviewers = models.Group.objects.create(name='Reviewer')
+        # Creating users
+        self.stud = models.User.objects.create_user(email=self.mock_data['stud_email'],
+                                                    password=self.mock_data['stud_password'])
+        self.supervisor = models.User.objects.create_user(email=self.mock_data['super_email'],
+                                                          password=self.mock_data['super_password'])
+        self.reviewer = models.User.objects.create_user(email=self.mock_data['rev_email'],
+                                                        password=self.mock_data['rev_password'])
+        # Assigning users to user groups
+        supervisors.user_set.add(self.supervisor)
+        students.user_set.add(self.stud)
+        reviewers.user_set.add(self.reviewer)
+        # Creating a topic, thesis and review
+        self.topic = models.Topic.objects.create(name=self.mock_data['topic_name'],
+                                                 short_description=self.mock_data['topic_desc'],
+                                                 student=self.stud,
+                                                 supervisor=self.supervisor)
+        self.thesis = models.Thesis.objects.create(topic=self.topic, student=self.stud,
+                                                   supervisor=self.supervisor, finished=True)
+        self.review = models.Review.objects.create(thesis=self.thesis, author=self.reviewer)
+        self.media_root = settings.MEDIA_ROOT
+        settings.MEDIA_ROOT = 'test/'
+        self.client = Client()
+
+    def test_student_can_propose_topic(self):
+        # We have to use mock_data to get password, since self.reviewer.password returns hash
+        self.client.login(username=self.reviewer.email, password=self.mock_data['rev_password'])
+        form_data = {}
+        with open('files/test_review_file.doc', 'rb') as f:
+            form_data['review_file'] = f
+            form_data['review_hidden_id'] = self.review.id,
+            self.client.post(reverse('reviews'), form_data)
+        try:
+            self.review = models.Review.objects.filter(author=self.reviewer)[0]
+        except IndexError:
+            self.fail()
+        self.assertEqual(ntpath.basename(self.review.file.name), 'review.doc')
+        self.assertEqual(self.review.finished, True)
+        self.assertEqual(self.review.finished_date.date(), timezone.now().date())
+
+    def tearDown(self):
+        shutil.rmtree(settings.MEDIA_ROOT)
+        settings.MEDIA_ROOT = self.media_root
