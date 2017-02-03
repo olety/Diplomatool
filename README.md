@@ -20,7 +20,7 @@ Student credentials:
 
 Reviewer credentials:
 * Login: rev@site.site
-* Password: ``
+* Password: `password123`
 
 ### Explanations
 
