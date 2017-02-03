@@ -25,6 +25,7 @@ install:
 
 before_script:
   - psql -c "CREATE DATABASE travisci;" -U postgres
+  - python manage.py syncdb --noinput
 
 script:
   - python manage.py syncdb --noinput
