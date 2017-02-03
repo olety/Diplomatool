@@ -9,8 +9,19 @@ setup(name='ssd-project',
       license='None',
       zip_safe=False,
       install_requires=[
-            'django',
-            'django-crispy_forms',
-            'django-model-utils'
-          ],
+          'Django',
+          'django-crispy-forms',
+          'django-model-utils',
+          'pbr',
+          'Pygments',
+          'requests',
+          'six',
+          'stevedore',
+          'tabulate',
+          'virtualenv',
+          'virtualenv-clone',
+          'virtualenvwrapper',
+          'wheel'
+
+      ],
       )
