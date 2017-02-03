@@ -9,7 +9,8 @@ language: python
 python:
   - 3.6
 
-services: sqlite3
+services:
+  - sqlite3
 
 env:
   - DJANGO=1.10.5
