@@ -137,7 +137,7 @@ class StudentTopicProposalForm(forms.Form):
     description = forms.CharField(widget=forms.Textarea)
 
     def __init__(self, *args, **kwargs):
-        super(StudentTopicProposalForm, self).__init__(*args, *kwargs)
+        super(StudentTopicProposalForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.helper.form_method = 'post'
         self.helper.add_input(Submit('submit', 'Submit', css_class='btn btn-primary btn-lg btn-block'))
