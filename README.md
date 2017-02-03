@@ -1,9 +1,10 @@
 # Diplomatool
 
-Tests : 
+Tests (image is a link) : 
 [![Build Status](https://travis-ci.org/olety/Diplomatool.svg?branch=master)](https://travis-ci.org/olety/Diplomatool)
 
-Documentation: 
+Documentation (image is a link) : [![Documentation Status](https://readthedocs.org/projects/diplomatool/badge/?version=latest)](http://diplomatool.readthedocs.io/?badge=latest)
+              
 
 Software System Development project for the Wroclaw University of Technology.
 
