@@ -34,6 +34,7 @@ class ProfileView(TemplateView):
 class TopicListView(ListView):
     """
     View class responsible for displaying review list. Presents the Topic model.
+
     """
 
     template_name = "student/topic_list.html"
@@ -46,6 +47,7 @@ class TopicListView(ListView):
 
         :return: List of available topics
         :rtype: QuerySet
+
         """
 
         return models.Topic.objects.filter(available=True)
@@ -57,6 +59,7 @@ class TopicListView(ListView):
         :param kwargs: Keyword arguments
         :return: The context of the topic list view
         :rtype: MultipleObjectMixin
+
         """
 
         context = super(TopicListView, self).get_context_data()
@@ -69,6 +72,7 @@ class TopicListView(ListView):
 
         :param request: (HttpRequest) The request performed by user
         :return: The response containing content of the topic list page
+
         :rtype TemplateResponse
 
         """
@@ -94,6 +98,7 @@ class ReviewListView(ListView):
     """
     View class responsible for displaying review list. Presents the Review model. Only reviewers and administrators will be able to access this
     view.
+
     """
 
     template_name = "reviewer/review_list.html"
@@ -108,6 +113,7 @@ class ReviewListView(ListView):
 
         :return: List of reviews made by current user
         :rtype: QuerySet
+
         """
 
         return models.Review.objects.filter(author=self.request.user)
@@ -119,6 +125,7 @@ class ReviewListView(ListView):
         :param kwargs: Keyword arguments
         :return: The context of the review list view
         :rtype: MultipleObjectMixin
+
         """
 
         context = super().get_context_data(**kwargs)
@@ -131,6 +138,7 @@ class ReviewListView(ListView):
 
         :param request: (HttpRequest) The request performed by user
         :return: The response containing content of the review list page
+
         :rtype TemplateResponse
 
         """
