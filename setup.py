@@ -7,7 +7,6 @@ setup(name='ssd-project',
       author='Oleksii Kyrylchuk, Piotr Fudali',
       author_email='olkyrylchuk@gmail.com',
       license='None',
-      packages=['django'],
       zip_safe=False,
       install_requires=[
           'Django',
