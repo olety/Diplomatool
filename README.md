@@ -29,7 +29,7 @@ Reviewer credentials:
 We've used a continious integration tool called Travis-CI for testing. It's a very popular test automation tool, 
 that runs test after every commit, and notifies you if they fail. 
 
-It executes `python3 manage.py test`, which automatically runs our tests (both unit and integration). 
+It executes `python3 manage.py test`, which automatically runs our tests (both unit and integration). Test sources are in [site_app/tests.py](site_app/tests.py).
 
 Automation of integration tests was possible by using a `Client` class in Django to simulate the behaviour of a users browser.
 
