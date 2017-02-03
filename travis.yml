@@ -3,6 +3,7 @@
 #   The set-up assumes a postgreSQL database.
 #
 
+
 language: python
 
 python:
@@ -11,7 +12,7 @@ python:
 services: postgresql
 
 env:
-  - DJANGO=1.4.1
+  - DJANGO=1.10.5
 
 before_install:
   - export DJANGO_SETTINGS_MODULE=Diplomatool.settings
