@@ -9,7 +9,7 @@ language: python
 python:
   - 3.6
 
-services: postgresql
+services: sqlite3
 
 env:
   - DJANGO=1.10.5
@@ -21,11 +21,8 @@ before_install:
 
 install:
   - pip install -r requirements.txt
-  - pip install psycopg2 --quiet
 
 before_script:
-  - psql -c "CREATE DATABASE travisci;" -U postgres
-  - python manage.py migrate
 
 script:
   - python manage.py test

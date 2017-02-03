@@ -25,8 +25,6 @@ sys.path.insert(0, os.path.abspath('..'))
 os.environ['DJANGO_SETTINGS_MODULE'] = 'Diplomatool.settings'
 
 django.setup()
-from django.core.management import execute_from_command_line
-execute_from_command_line(['manage.py', 'migrate'])
 # sys.path.insert(0, os.path.abspath('.'))
 
 # sys.path.insert(0, os.path.abspath('..'))
