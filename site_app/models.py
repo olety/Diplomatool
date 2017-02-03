@@ -340,7 +340,7 @@ class Defense(models.Model):
         :return: String representation of Defense
         :rtype: string
         """
-        return self.get_defense_name
+        return self.get_defense_name()
 
     def get_defense_name(self):
         """
