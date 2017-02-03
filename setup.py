@@ -22,6 +22,5 @@ setup(name='ssd-project',
           'virtualenv-clone',
           'virtualenvwrapper',
           'wheel'
-
       ],
       )

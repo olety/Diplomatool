@@ -72,61 +72,72 @@ WSGI_APPLICATION = 'Diplomatool.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if 'TRAVIS' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'travisci',
+            'USER': 'postgres',
+            'PASSWORD': '',
+            'HOST': 'localhost',
+            'PORT': '',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
-# Password validation
-# https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
+    # Password validation
+    # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
 
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
+    AUTH_PASSWORD_VALIDATORS = [
+        {
+            'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        },
+        {
+            'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        },
+        {
+            'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        },
+        {
+            'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        },
+    ]
 
-AUTH_USER_MODEL = 'site_app.User'
+    AUTH_USER_MODEL = 'site_app.User'
 
-# Internationalization
-# https://docs.djangoproject.com/en/1.10/topics/i18n/
+    # Internationalization
+    # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+    LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+    TIME_ZONE = 'UTC'
 
-USE_I18N = True
+    USE_I18N = True
 
-USE_L10N = True
+    USE_L10N = True
 
-USE_TZ = True
+    USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.10/howto/static-files/
+    # Static files (CSS, JavaScript, Images)
+    # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
-STATIC_URL = '/static/'
+    STATIC_URL = '/static/'
 
-# Bootstrap package
+    # Bootstrap package
 
-CRISPY_TEMPLATE_PACK = 'bootstrap3'
+    CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
-# Logging in/out
-LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = 'login'
-LOGOUT_REDIRECT_URL = '/'
+    # Logging in/out
+    LOGIN_REDIRECT_URL = '/'
+    LOGIN_URL = 'login'
+    LOGOUT_REDIRECT_URL = '/'
 
-PROJECT_ROOT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir))
-MEDIA_ROOT = os.path.join(PROJECT_ROOT_PATH, '')
-MEDIA_URL = '/files/'
+    PROJECT_ROOT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir))
+    MEDIA_ROOT = os.path.join(PROJECT_ROOT_PATH, '')
+    MEDIA_URL = '/files/'
