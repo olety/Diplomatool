@@ -33,7 +33,7 @@ It executes `python3 manage.py test`, which automatically runs our tests (both u
 
 Automation of integration tests was possible by using a `Client` class in Django to simulate the behaviour of a users browser.
 
-Our page on there is available by clicking [![Documentation Status](https://readthedocs.org/projects/diplomatool/badge/?version=latest)](http://diplomatool.readthedocs.io/?badge=latest) image.
+Our page on there is available by clicking [![Build Status](https://travis-ci.org/olety/Diplomatool.svg?branch=master)](https://travis-ci.org/olety/Diplomatool)
 
 #### Documentation
 
