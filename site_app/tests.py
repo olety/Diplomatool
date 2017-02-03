@@ -20,10 +20,18 @@ class StudentTestCase(TestCase):
         g = models.Group.objects.create(name='Student')
         stud = models.User.objects.create_user(email=self.mock_email, password=self.mock_password)
         g.user_set.add(stud)
+
         self.client = Client()
 
     def test_student_created(self):
         self.assertTrue(models.User.objects.filter(email=self.mock_email).exists())
+
+    def test_student_in_group(self):
+        try:
+            student = models.User.objects.filter(email=self.mock_email)[0]
+        except IndexError:
+            self.fail()
+        self.assertTrue(student.groups.all().filter(name='Student').exists())
 
     def test_student_can_view_profile(self):
         self.client.login(username=self.mock_email, password=self.mock_password)
@@ -50,6 +58,13 @@ class ReviewerTestCase(TestCase):
 
     def test_student_created(self):
         self.assertTrue(models.User.objects.filter(email=self.mock_email).exists())
+
+    def test_reviewer_in_group(self):
+        try:
+            reviewer = models.User.objects.filter(email=self.mock_email)[0]
+        except IndexError:
+            self.fail()
+        self.assertTrue(reviewer.groups.all().filter(name='Reviewer').exists())
 
     def test_student_can_view_profile(self):
         self.client.login(username=self.mock_email, password=self.mock_password)
