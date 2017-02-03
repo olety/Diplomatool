@@ -28,4 +28,4 @@ before_script:
   - python manage.py syncdb --noinput
 
 script:
-  - python manage.py syncdb --noinput
+  - python manage.py test
