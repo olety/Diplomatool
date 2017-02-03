@@ -31,11 +31,13 @@ class TopicChangeForm(forms.ModelForm):
 
 
 class UserCreationForm(forms.ModelForm):
-    """A form for creating new users. Includes all the required
+    """
+    A form for creating new users. Includes all the required
     fields, plus a repeated password. Attributes:
     password1, password2
     Class contains useful methods for the password processing:
     clean_password2(), save(commit)
+
     """
 
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
@@ -43,7 +45,8 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         """
-        Meta class describes which (if any) this form represents. It is used by internal Django functions.
+        Meta class describes which (if any) fields this form represents. It is used by internal Django functions.
+
         """
         model = User
         fields = ('email', 'first_name', 'last_name', 'index_number')
@@ -56,6 +59,7 @@ class UserCreationForm(forms.ModelForm):
         :raises: ValidationError
         :return: Correct password
         :rtype: string
+
         """
         password1 = self.cleaned_data.get('password1')
         password2 = self.cleaned_data.get('password2')
@@ -69,7 +73,9 @@ class UserCreationForm(forms.ModelForm):
 
         :param commit: (bool) If True then the password is saved in database, if False it is only saved in form
         :return: User for which the passwords were given
+
         :rtype User
+
         """
 
         # Save the provided password
